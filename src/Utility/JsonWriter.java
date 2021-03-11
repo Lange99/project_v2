@@ -1,17 +1,22 @@
-package Project_v2;
+package Utility;
 
 import Project_v1.Net;
 import Project_v1.Pair;
 import Project_v1.Place;
 import Project_v1.Transition;
-import Utility.Reader;
+import Project_v2.Net;
+import Project_v2.Pair;
+import Project_v2.Place;
+import Project_v2.Transition;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class JsonWriter {
     public static final String WRITING_FILE_ERROR = "writing file error.";
@@ -90,4 +95,5 @@ public class JsonWriter {
         } while (ctrl);
         return path+name;
     }
+
 }
