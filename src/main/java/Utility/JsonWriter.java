@@ -76,7 +76,7 @@ public class JsonWriter {
             Transition trans = pair.getTrans();
             //get the string name of the transition
             String t = trans.getName();
-            int d = trans.getInputOutput(t);
+            int d = trans.getInputOutput(p);
 
             //initialize the jsonPair to build
             JSONObject jsonPair = new JSONObject();

@@ -147,7 +147,7 @@ public class NetManager {
         for (Pair p: net.getNet()) {
             String place = p.getPlace().getName();
             String trans = p.getTrans().getName();
-            int direction = p.getTrans().getInputOutput(p.getTrans().getName());
+            int direction = p.getTrans().getInputOutput(p.getPlace().getName());
             //add place to arraylist of places
             places.add(place);
             //add transition to arraylist of transitions

@@ -5,6 +5,8 @@ import java.util.ArrayList;
 public class Transition {
     private String name;
     private int weight = 1;
+    private ArrayList<String> idPre= new ArrayList<>();
+    private ArrayList<String> idPost= new ArrayList<>();
 
     Transition(String name){
         this.name=name;
@@ -18,8 +20,6 @@ public class Transition {
             idPost.add(name);
     }
 
-    private ArrayList<String> idPre= new ArrayList<>();
-    private ArrayList<String> idPost= new ArrayList<>();
 
     public String getName() {
         return name;
@@ -67,5 +67,4 @@ public class Transition {
                 ret = 0;
         return ret;
     }
-
 }
