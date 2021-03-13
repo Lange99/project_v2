@@ -14,6 +14,7 @@ public class NetManager {
     public static final String NAME_OF_NET = "Add the name of Net:";
     public static final String MENU = "What do you want do?\n0)EXIT\n1)Add new Net\n"+/*"2)Check the net\n3)Save Net\n"+*/"2)Load net";
     public static final String WANT_TO_DO_ANOTHER_OPERATION = "you want to do another operation ";
+    public static final String SAVE_NET = "Do you want to save the net that you have already made? ";
     public static final String DIGIT_YOUR_CHOISE = "Digit your choise ";
     public static final String DIGIT_VALID_CHOISE = "Digit valid choise!";
     public static final String THE_NET_IS_INCORRECT_IT_CAN_T_BE_SAVED = "The net is incorrect, it can't be saved";
@@ -52,27 +53,36 @@ public class NetManager {
 
     }
 
+    /**
+     * this method allows to add a net
+     */
     public void addNet() {
+
         do {
             Net n= new Net(Reader.ReadString(NAME_OF_NET));
-            if(checkNet(n) && n.checkTrans()) {
+            //if the new net is correct we show it to the user and ask if he wants to save it
+            if(checkNet(n) && n.checkTrans() && n.checkConnect()) {
                 showNet(n);
                 System.out.println(THE_NET_IS_CORRECT_WE_ARE_GOING_TO_SAVE_IT);
                 netList.add(n);
-                boolean c=n.checkConnect();
-                System.out.println(c);
-                //  if(Reader.yesOrNo("Do you want to save the net that you have already made? ")){
-                //TODO: JsonWriter.writeJsonFile(n);
-                // }
+
+                if(Reader.yesOrNo(SAVE_NET)){
+                    JsonWriter.writeJsonFile(n);
+                }
             }else{
+                //if the net is incorrect we inform the user
                 System.out.println(THE_NET_IS_INCORRECT_IT_CAN_T_BE_SAVED);
             }
         } while (Reader.yesOrNo(ANOTHER_NET));
     }
 
-    //DA DEBUGGARE
+    /**
+     * the method check if there is only a place connect to a transition
+     * @param n the net we have to check
+     * @return false if there are some problems and if there is one or more pendant connection
+     */
     public boolean checkNet(Net n){
-
+//if there is a problem the method return false
         if(n.checkPendantNode()==false){
 
             return false;
@@ -86,16 +96,20 @@ public class NetManager {
      * @throws FileNotFoundException
      */
     public void loadNet() throws FileNotFoundException {
+        String path_ = new File("src/main/java/JsonFile").getAbsolutePath();
         //initialize the File object directory
-        File directory = new File("src/main/java/Json");
+        File directory = new File(path_);
         //initialize the string that contains the list of name file
         String[] pathname = directory.list();
         int i = 0;
         //for every name file in the directory print the name
-        for (String s: pathname) {
-            i++;
-            System.out.println(i+") "+s);
+        if (pathname != null) {
+            for (String s: pathname) {
+                i++;
+                System.out.println(i+") "+s);
+            }
         }
+
         //if there are not files in the directory print this
         if (i==0) {
             System.out.println("There aren't any files to load");
@@ -104,16 +118,15 @@ public class NetManager {
             //else ask to user to chose which file load
             int number = Reader.leggiIntero("Insert the id of the file you want to load ", 1, i);
             //get the name of file by the pathname string array and decrement 1 because the print file start with 1
-            String path = "src/main/java/Json/"+pathname[number-1];
+            String path = "src/main/java/JsonFile/"+pathname[number-1];
             //initialize new net and read json file
-            /* TODO: JSON
             Net newNet = JsonReader.readJson(path);
             //add new net to the list of the net
             netList.add(newNet);
             System.out.println("File is loaded");
             System.out.println("Visualizzazione della lista");
             //view the new net
-            showNet(newNet);*/
+            showNet(newNet);
         }
     }
 
@@ -207,43 +220,5 @@ public class NetManager {
         }
         return ctrl;
     }
-
-//    method that delete the double reference to the same pair
-//    private HashMap<Integer, Integer> checkDuplicate(HashMap<Integer, Integer> map) {
-//        //initialize new map that is equal to the map to check
-//        HashMap<Integer, Integer> newMap = new HashMap<Integer, Integer>();
-//        //for every elements of map add it to newmap
-//        for (Map.Entry<Integer, Integer> copy: map.entrySet()) {
-//            newMap.put(copy.getKey(),copy.getValue());
-//        }
-//        //initialize new Arraylist done that contains the index already check
-//        ArrayList<Integer> done = new ArrayList<Integer>();
-//        //for every element in map
-//        for (Map.Entry<Integer, Integer> entry: map.entrySet()) {
-//            //initialize boolean variable ctrl that allow to delete element in map
-//            boolean ctrl = true;
-//            for (Integer d: done) {
-//                //if the one of the copies is already delete, it won't do it again
-//                if (entry.getKey().equals(d)) {
-//                    ctrl = false;
-//                    break;
-//                }
-//            }
-//            if (ctrl) {
-//                //for every element in map check if its key is equal to a value of another element and vice versa
-//                for (Map.Entry<Integer, Integer> entry2: map.entrySet()) {
-//                    if (entry.getKey().equals(entry2.getValue())) {
-//                        if (entry.getValue().equals(entry2.getKey())) {
-//                            //if both check are true one element is removed by newMap
-//                            newMap.remove(entry2.getKey());
-//                            done.add(entry2.getKey());
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        //the newMap is completed
-//        return newMap;
-//    }
 
 }
