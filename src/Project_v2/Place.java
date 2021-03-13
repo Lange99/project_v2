@@ -1,16 +1,22 @@
 package Project_v2;
 
 public class Place {
-    private String id;
-    private int numberOfToken = 1;
+    private String name;
+    private int numberOfToken = 0;
 
-    public String getId() {
-        return id;
+    public String getName() {
+        return name;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setToken(int n){ this.numberOfToken=n;}
+    public Place(String _name){
+        this.name=_name;
+    }
+
+    public void setToken(int n){
+        this.numberOfToken=n;
+    }
 }

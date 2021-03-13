@@ -1,5 +1,6 @@
 package Project_v2;
 import Utility.JsonReader;
+import Utility.JsonWriter;
 import Utility.Reader;
 
 import java.io.File;
@@ -8,227 +9,241 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-
 public class NetManager {
     public static final String ANOTHER_NET = "You want add another Net?";
     public static final String NAME_OF_NET = "Add the name of Net:";
-    public static final String MENU = "What do you want do?\n0)EXIT\n1)Add new Net\n" +/*"2)Check the net\n3)Save Net\n"+*/"2)Load net\n3) Visualize a net\n4)add a Petri's net";
+    public static final String MENU = "What do you want do?\n0)EXIT\n1)Add new Net\n"+/*"2)Check the net\n3)Save Net\n"+*/"2)Load net";
     public static final String WANT_TO_DO_ANOTHER_OPERATION = "you want to do another operation ";
     public static final String DIGIT_YOUR_CHOISE = "Digit your choise ";
     public static final String DIGIT_VALID_CHOISE = "Digit valid choise!";
-    public static final String THE_NET_IS_INCORRECT = "The net is incorrect, it can't be saved";
-    public static final String THE_NET_IS_CORRECT = "The net is correct, we are going to save it";
+    public static final String THE_NET_IS_INCORRECT_IT_CAN_T_BE_SAVED = "The net is incorrect, it can't be saved";
+    public static final String THE_NET_IS_CORRECT_WE_ARE_GOING_TO_SAVE_IT = "The net is correct, we are going to save it";
 
     private ArrayList<Net> netList = new ArrayList<Net>();
 
     public void menageOption() throws FileNotFoundException {
-        boolean check = true;
-        int choise = 0;
+        boolean check=true;
+        int choise=0;
         do {
             System.out.println(MENU);
             choise = Reader.readNumber(DIGIT_YOUR_CHOISE);
-            while (choise < 0 || choise > 4) {
+            while(choise<0 || choise>4){
                 System.out.println(DIGIT_VALID_CHOISE);
-                choise = Reader.readNumber(DIGIT_YOUR_CHOISE);
+                choise=Reader.readNumber(DIGIT_YOUR_CHOISE);
             }
 
-            switch (choise) {
+            switch (choise){
                 case 0:
-                    check = false;
+                    check=false;
                     break;
                 case 1:
+
                     addNet();
-                    check = Reader.yesOrNo(WANT_TO_DO_ANOTHER_OPERATION);
+                    check=Reader.yesOrNo(WANT_TO_DO_ANOTHER_OPERATION);
                     break;
+
+
                 case 2:
                     loadNet();
-                    check = Reader.yesOrNo(WANT_TO_DO_ANOTHER_OPERATION);
+                    check=Reader.yesOrNo(WANT_TO_DO_ANOTHER_OPERATION);
                     break;
-//               case 2:
-//                    checkNet();
-//                    check=Reader.yesOrNo(WANT_TO_DO_ANOTHER_OPERATION);
-//                    break;
-//
-                case 3:
-                    //TODO
-
-                    printNet();
-                    check = Reader.yesOrNo(WANT_TO_DO_ANOTHER_OPERATION);
-                    break;
-
-                case 4:
-                    addPetriNet();
-                    check = Reader.yesOrNo(WANT_TO_DO_ANOTHER_OPERATION);
-                    break;
-
-
             }
-        } while (check == true);
+        }while(check==true);
 
     }
 
-    /**
-     * this method allows to add a new net
-     */
     public void addNet() {
         do {
-            //the name is required to use the constructor where there is the request to insert the pairs
-            Net n = new Net(Reader.ReadString(NAME_OF_NET));
-            //We check if the net has pendant pair or not
-            if (checkNet(n)) {
+            Net n= new Net(Reader.ReadString(NAME_OF_NET));
+            if(checkNet(n) && n.checkTrans()) {
+                showNet(n);
+                System.out.println(THE_NET_IS_CORRECT_WE_ARE_GOING_TO_SAVE_IT);
                 netList.add(n);
+                boolean c=n.checkConnect();
+                System.out.println(c);
+                //  if(Reader.yesOrNo("Do you want to save the net that you have already made? ")){
+                //TODO: JsonWriter.writeJsonFile(n);
+                // }
+            }else{
+                System.out.println(THE_NET_IS_INCORRECT_IT_CAN_T_BE_SAVED);
             }
         } while (Reader.yesOrNo(ANOTHER_NET));
     }
 
-    /**
-     * this method allows to add a new net
-     */
-    public void addPetriNet() {
-        //do {
-            //todo: QUESTA COSA MI SERVE PER DEBUGGARE, E' DA FARE BENE
-            //the name is required to use the constructor where there is the request to insert the pairs
-            int num = 0;
-            String nameNet;
-            if (netList.size() == 0) {
-                System.out.println("There aren't any nets");
-            } else {
-                for (int i = 0; i < netList.size(); i++) {
-                    System.out.println((i + 1) + ") " + netList.get(i).getName());
-                }
-                nameNet=Reader.readNotEmpityString("write the name");
-                //TODO: check se la rete esiste
-                for (Net net: netList) {
-                    if(net.getName().compareTo(nameNet)==0){
-                        netList.add(new PetriNet(net, net.getName()));
-                    }
-                }
+    //DA DEBUGGARE
+    public boolean checkNet(Net n){
 
+        if(n.checkPendantNode()==false){
 
-
-            }
-        //} while (Reader.yesOrNo(ANOTHER_NET));
-    }
-
-    /**
-     * @param n this is the net we have to check
-     * @return true if the net is correct and it doesn't have pendant pair
-     */
-    public boolean checkNet(Net n) {
-        //we call the method in the Net class which check if there are some pendant pairs
-        if (n.checkPendantNode() == false) {
-
-            System.out.println(THE_NET_IS_INCORRECT);
             return false;
-        } else {
-            //if the net is correct, we show it to the user
-            showNet(n);
-            System.out.println(THE_NET_IS_CORRECT);
+        }else{
             return true;
         }
-
     }
 
-    private void printNet() {
-
-        int num = 0;
-        if (netList.size() == 0) {
-            System.out.println("There aren't any nets");
-        } else {
-
-            for (int i = 0; i < netList.size(); i++) {
-                System.out.println((i + 1) + ") " + netList.get(i).getName());
-            }
-            num = Reader.leggiIntero("Insert the number of which net do you want to visualize?", 1, netList.size() + 1);
-            showNet(netList.remove(num - 1));
-        }
-    }
-
+    /**
+     * method to load a net by json file
+     * @throws FileNotFoundException
+     */
     public void loadNet() throws FileNotFoundException {
+        //initialize the File object directory
         File directory = new File("src/main/java/Json");
+        //initialize the string that contains the list of name file
         String[] pathname = directory.list();
         int i = 0;
-        for (String s : pathname) {
+        //for every name file in the directory print the name
+        for (String s: pathname) {
             i++;
-            System.out.println(i + ") " + s);
+            System.out.println(i+") "+s);
         }
-        if (i == 0) {
+        //if there are not files in the directory print this
+        if (i==0) {
             System.out.println("There aren't any files to load");
-        } else {
+        }
+        else {
+            //else ask to user to chose which file load
             int number = Reader.leggiIntero("Insert the id of the file you want to load ", 1, i);
-            String path = "src/main/java/Json/" + pathname[number - 1];
+            //get the name of file by the pathname string array and decrement 1 because the print file start with 1
+            String path = "src/main/java/Json/"+pathname[number-1];
+            //initialize new net and read json file
+            /* TODO: JSON
             Net newNet = JsonReader.readJson(path);
+            //add new net to the list of the net
             netList.add(newNet);
             System.out.println("File is loaded");
             System.out.println("Visualizzazione della lista");
-            showNet(newNet);
+            //view the new net
+            showNet(newNet);*/
         }
     }
 
-    //JACK COMMENTA IL CODICE
+    /**
+     * method to view the net
+     * @param net
+     */
     public void showNet(Net net) {
+        //get name and if of the net
         String nameNet = net.getName();
         String idNet = net.getID();
-        ArrayList<String> places = new ArrayList<>();
-        ArrayList<String> transitions = new ArrayList<>();
+        //initialize the places and transitions arraylist
+        ArrayList<String> places = new ArrayList<String>();
+        ArrayList<String> transitions = new ArrayList<String>();
+        ArrayList<Integer> directions = new ArrayList<>();
 
-        for (Pair p : net.getNet()) {
-            String place = p.getPlace().getId();
-            String trans = p.getTrans().getId();
+        //for every pair in the net get the name of place and name of transition
+        for (Pair p: net.getNet()) {
+            String place = p.getPlace().getName();
+            String trans = p.getTrans().getName();
+            int direction = p.getTrans().getInputOutput(p.getTrans().getName());
+            //add place to arraylist of places
             places.add(place);
+            //add transition to arraylist of transitions
             transitions.add(trans);
+            directions.add(direction);
         }
-
-        HashMap<Integer, Integer> index = new HashMap<>();
+        ArrayList<Integer> order = new ArrayList<>();
+        //initialize hashmap that contains the index of place that have the same transition in common
+        HashMap<Integer, Integer> index = new HashMap<Integer, Integer>();
+        //for every transition in the arraylist check if there are other transition equal
         for (int i = 0; i < transitions.size(); i++) {
             for (int j = 0; j < transitions.size(); j++) {
+                //if index i and j are different, check
                 if (i != j) {
+                    //if the transition in i position is equal to the transition in j position, put the index i and j put the index i and j in the hashmap of index
                     if (transitions.get(i).equals(transitions.get(j))) {
-                        index.put(i, j);
-                    }
-                }
-            }
-        }
-        HashMap<Integer, Integer> indexUpdate = checkDuplicate(index);
-        ArrayList<String> couples = new ArrayList<>();
-        for (Map.Entry<Integer, Integer> entry : indexUpdate.entrySet()) {
-            String couple = places.get(entry.getKey()) + "-----" + transitions.get(entry.getKey()) + "-----" + places.get(entry.getValue());
-            couples.add(couple);
-        }
-
-        System.out.println("\nName net: " + nameNet + "\tID net: " + idNet);
-        System.out.println("List pairs:");
-        for (String s : couples) {
-            System.out.println("\t" + s);
-        }
-        System.out.println();
-    }
-
-    private HashMap<Integer, Integer> checkDuplicate(HashMap<Integer, Integer> map) {
-        HashMap<Integer, Integer> newMap = new HashMap<>();
-        for (Map.Entry<Integer, Integer> copy : map.entrySet()) {
-            newMap.put(copy.getKey(), copy.getValue());
-        }
-        ArrayList<Integer> done = new ArrayList<>();
-        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
-            boolean ctrl = true;
-            for (Integer d : done) {
-                if (entry.getKey().equals(d)) {
-                    ctrl = false;
-                    break;
-                }
-            }
-            if (ctrl) {
-                for (Map.Entry<Integer, Integer> entry2 : map.entrySet()) {
-                    if (entry.getKey().equals(entry2.getValue())) {
-                        if (entry.getValue().equals(entry2.getKey())) {
-                            newMap.remove(entry2.getKey());
-                            done.add(entry2.getKey());
+                        int dir = directions.get(i);
+                        if (dir==1) {
+                            if (!existAlready(index, i, j)) {
+                                index.put(i, j);
+                                order.add(0);
+                            }
+                        }
+                        else {
+                            if (!existAlready(index, i, j)) {
+                                index.put(i, j);
+                                order.add(1);
+                            }
                         }
                     }
                 }
             }
         }
-        return newMap;
+        //initialize new hashmap of index without the copies of the same reference
+        //HashMap<Integer, Integer> indexUpdate = checkDuplicate(index);
+        //initialize new Arraylist of couples
+        ArrayList<String> couples = new ArrayList<String>();
+        //for every element in indexUpdate initialize a String that contains the two place and the transition in common
+        int i = 0;
+        String couple = "";
+        for (Map.Entry<Integer, Integer> entry: index.entrySet()) {
+            if (order.get(i) == 0) {
+                couple = places.get(entry.getKey())+"----->"+transitions.get(entry.getValue());
+            }
+            else {
+                couple = places.get(entry.getKey())+"<-----"+transitions.get(entry.getValue());
+            }
+            //add the string to the arraylist
+            couples.add(couple);
+            i++;
+        }
+
+        //print the name and id and print all the pairs with their transition
+        System.out.println("\nName net: "+nameNet+"\t\tID net: "+idNet);
+        System.out.println("List pairs:");
+        for (String s: couples) {
+            System.out.println("\t"+s);
+        }
+        System.out.println();
     }
+
+    private static boolean existAlready(HashMap<Integer, Integer> index, int i, int j) {
+        boolean ctrl = false;
+        for (Map.Entry<Integer, Integer> entry: index.entrySet()) {
+            if (entry.getKey() == i) {
+                if (entry.getValue() == j) {
+                    ctrl = true;
+                }
+            }
+        }
+        return ctrl;
+    }
+
+//    method that delete the double reference to the same pair
+//    private HashMap<Integer, Integer> checkDuplicate(HashMap<Integer, Integer> map) {
+//        //initialize new map that is equal to the map to check
+//        HashMap<Integer, Integer> newMap = new HashMap<Integer, Integer>();
+//        //for every elements of map add it to newmap
+//        for (Map.Entry<Integer, Integer> copy: map.entrySet()) {
+//            newMap.put(copy.getKey(),copy.getValue());
+//        }
+//        //initialize new Arraylist done that contains the index already check
+//        ArrayList<Integer> done = new ArrayList<Integer>();
+//        //for every element in map
+//        for (Map.Entry<Integer, Integer> entry: map.entrySet()) {
+//            //initialize boolean variable ctrl that allow to delete element in map
+//            boolean ctrl = true;
+//            for (Integer d: done) {
+//                //if the one of the copies is already delete, it won't do it again
+//                if (entry.getKey().equals(d)) {
+//                    ctrl = false;
+//                    break;
+//                }
+//            }
+//            if (ctrl) {
+//                //for every element in map check if its key is equal to a value of another element and vice versa
+//                for (Map.Entry<Integer, Integer> entry2: map.entrySet()) {
+//                    if (entry.getKey().equals(entry2.getValue())) {
+//                        if (entry.getValue().equals(entry2.getKey())) {
+//                            //if both check are true one element is removed by newMap
+//                            newMap.remove(entry2.getKey());
+//                            done.add(entry2.getKey());
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        //the newMap is completed
+//        return newMap;
+//    }
+
 }

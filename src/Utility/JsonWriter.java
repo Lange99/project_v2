@@ -1,15 +1,11 @@
 package Utility;
 
-import Project_v1.Net;
-import Project_v1.Pair;
-import Project_v1.Place;
-import Project_v1.Transition;
 import Project_v2.Net;
 import Project_v2.Pair;
 import Project_v2.Place;
 import Project_v2.Transition;
-import org.json.JSONArray;
-import org.json.JSONObject;
+//import org.json.JSONArray;
+//import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -23,10 +19,13 @@ public class JsonWriter {
     //pathname string of the file
     private static final String path = new File("src/main/java/Json/").getAbsolutePath();
 
-    /**
-     * method to write json
-     * @param net
-     */
+
+    //TODO: HO COMMENTATO TUTTI I METODI PERCHè NON è STATO IMPORTATOL IL JSON (jack importa il json pls)
+        /**
+         * method to write json
+         * @param net
+         */
+        /*
     public static void writeJsonFile(Net net) {
         String stringJson = stringNet(net);
         String fileToWrite = makeFile();
@@ -94,6 +93,6 @@ public class JsonWriter {
             }
         } while (ctrl);
         return path+name;
-    }
+    }*/
 
 }

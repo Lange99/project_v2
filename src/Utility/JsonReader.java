@@ -10,6 +10,8 @@ import java.util.Scanner;
 public class JsonReader {
     //private static String path = new File("src/main/java/Json/Net.json").getAbsolutePath();
 
+    //TODO: IMPORTARE IL JSON
+/*
     public static Net readJson(String pathname) throws FileNotFoundException {
         String path = new File(pathname).getAbsolutePath();
 
@@ -35,5 +37,5 @@ public class JsonReader {
             net.addPairFromJson(pair);
         }
         return net;
-    }
+    }*/
 }
