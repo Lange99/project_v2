@@ -5,6 +5,7 @@ import Utility.Reader;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,7 +13,7 @@ import java.util.Map;
 public class NetManager {
     public static final String ANOTHER_NET = "You want add another Net?";
     public static final String NAME_OF_NET = "Add the name of Net:";
-    public static final String MENU = "What do you want do?\n0)EXIT\n1)Add new Net\n"+/*"2)Check the net\n3)Save Net\n"+*/"2)Load net";
+    public static final String MENU = "What do you want do?\n0)EXIT\n1)Add new Net\n2)Load net\n3)Create a new Petri's Net";
     public static final String WANT_TO_DO_ANOTHER_OPERATION = "you want to do another operation ";
     public static final String SAVE_NET = "Do you want to save the net that you have already made? ";
     public static final String DIGIT_YOUR_CHOISE = "Digit your choise ";
@@ -20,9 +21,10 @@ public class NetManager {
     public static final String THE_NET_IS_INCORRECT_IT_CAN_T_BE_SAVED = "The net is incorrect, it can't be saved";
     public static final String THE_NET_IS_CORRECT_WE_ARE_GOING_TO_SAVE_IT = "The net is correct, we are going to save it";
 
+
     private ArrayList<Net> netList = new ArrayList<Net>();
 
-    public void menageOption() throws FileNotFoundException {
+    public void menageOption() throws IOException {
         boolean check=true;
         int choise=0;
         do {
@@ -43,14 +45,29 @@ public class NetManager {
                     check=Reader.yesOrNo(WANT_TO_DO_ANOTHER_OPERATION);
                     break;
 
-
                 case 2:
                     loadNet();
                     check=Reader.yesOrNo(WANT_TO_DO_ANOTHER_OPERATION);
                     break;
+
+                case 3:
+                    if (netList.size()==0){
+                        System.out.println("Before creating a network you need to upload one ore create a new Net");
+                    }else{
+                        addPetriNet();
+                    }
+                    break;
+
             }
         }while(check==true);
 
+    }
+
+
+    //Metodo per la creazione di petri net;
+    public void addPetriNet(){
+        PetriNet newPetriNet = new PetriNet(loadOneNet());
+        netList.add(newPetriNet);
     }
 
     /**
@@ -219,6 +236,16 @@ public class NetManager {
             }
         }
         return ctrl;
+    }
+
+    //metodo che stampa tutte le net in netlist e ne restituisce una scelta dall'utente
+    public Net loadOneNet(){
+
+        for (int i =0; i<netList.size(); i++){
+            System.out.println(i+") " + netList.get(i).getName());
+        }
+        int choise = Reader.leggiIntero("choose the network number ", 0, netList.size());
+        return netList.get(choise);
     }
 
 }

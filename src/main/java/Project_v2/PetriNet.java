@@ -5,6 +5,7 @@ import Utility.Reader;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 
 public class PetriNet extends Net {
     public static final String HOW_MANY_TOKEN = "How many tokens do you want this place to have?\n(if you don't want tokens enter 0)";
@@ -12,7 +13,7 @@ public class PetriNet extends Net {
     //private boolean def; //indicates whether the petri net has the default values or not
 
 
-    public PetriNet(Net genericNet, String name) {
+    public PetriNet(Net genericNet) {
         super(genericNet);
         addWeight();
         addToken();
@@ -50,6 +51,7 @@ public class PetriNet extends Net {
                     break;
                 }
                 //inizio ricerca per vedere se esiste
+                check = false;
                 for (Transition trans : super.getSetOfTrans()) {
                     if (trans.getName().compareTo(transId) == 0) {
                         tempTrans = trans;
