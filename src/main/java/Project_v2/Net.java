@@ -238,7 +238,6 @@ public class Net {
 
     /**
      * Deep search algorithm to check if the graph is connected
-     *
      * @return true if connected otherwise it returns false
      */
     public boolean checkConnect() {

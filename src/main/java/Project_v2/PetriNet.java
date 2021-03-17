@@ -76,7 +76,7 @@ public class PetriNet extends Net {
                     i++;
                 }
 
-                int choise = Reader.leggiIntero("where do you want to add the tokens?", 0, i);
+                int choise = Reader.leggiIntero("where do you want to add the tokens?", 0, i-1);
                 placeId = tempPlace.get(choise).getName();
 
                 //inizio ricerca per vedere se esiste
