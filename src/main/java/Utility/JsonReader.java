@@ -34,7 +34,7 @@ public class JsonReader {
         while (sc.hasNextLine()) {
             sb.append(sc.nextLine()).append("\n");
         }
-        System.out.println(sb.toString());
+        //System.out.println(sb.toString());
         //initialize JsonObject that contains the file Json
         JSONObject objectJson = new JSONObject(sb.toString());
         //parsing the name and id of the Json file net

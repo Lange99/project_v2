@@ -26,10 +26,10 @@ public class Pair {
     }
 
 
-
     public Pair(String place_name, String trans_name, int inOut){
         this.place = new Place(place_name);
-        this.trans = new Transition(trans_name, inOut);
+        this.trans = new Transition(trans_name);
+        this.trans.addPreOrPost(place_name, inOut);
     }
     public void setWeight(int weight) {
 

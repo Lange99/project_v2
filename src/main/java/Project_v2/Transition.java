@@ -11,12 +11,11 @@ public class Transition {
         this.name=name;
     }
 
-    Transition(String name, int inOut) {
-        this.name=name;
+    public void addPreOrPost(String placeName, int inOut) {
         if (inOut == 1)
-            idPre.add(name);
+            idPre.add(placeName);
         else
-            idPost.add(name);
+            idPost.add(placeName);
     }
 
     public String getName() {
