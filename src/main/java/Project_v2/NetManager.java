@@ -78,7 +78,7 @@ public class NetManager {
     public void addNet() {
 
         do {
-            Net n= new Net(Reader.ReadString(NAME_OF_NET));
+            Net n= new Net(Reader.readNotEmpityString(NAME_OF_NET));
             //if the new net is correct we show it to the user and ask if he wants to save it
             if(checkNet(n) && n.checkTrans() && n.checkConnect()) {
                 showNet(n);
