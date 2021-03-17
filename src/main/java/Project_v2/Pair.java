@@ -3,6 +3,11 @@ package Project_v2;
 public class Pair {
     private Place place;
     private Transition trans;
+    private int weigth = 1;
+
+    public void setWeigth(int weigth) {
+        this.weigth = weigth;
+    }
 
     public Place getPlace() {
         return place;
