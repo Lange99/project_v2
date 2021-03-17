@@ -141,6 +141,8 @@ public class Net {
                     } else if (checkPlace && !checkTrans) {
                         setOfTrans.add(t);
                     }
+                    checkTrans = false;
+                    checkPlace = false;
 
                 } else {
                     //I say to the user that the pair already exists
