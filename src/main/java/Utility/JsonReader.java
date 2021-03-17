@@ -55,6 +55,8 @@ public class JsonReader {
             Pair pair = new Pair(place, trans, direction);
             net.addPairFromJson(pair);
         }
+        // fill the sets with transitions and nodes
+        net.fillSet();
         //the net is built and return
         return net;
     }

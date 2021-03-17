@@ -42,7 +42,7 @@ public class PetriNet extends Net {
                 System.out.println(i + ") " + placeName);
                 i++;
             }
-            String placeToChange = placeTemp.get(Reader.leggiIntero("What transition you want change?", 0, i));
+            String placeToChange = placeTemp.get(Reader.leggiIntero("What place you want change?", 0, i));
 
             //ciclo le coppie finche non trovo quella desiderata
             for(i=0; i<super.getNet().size(); i++){

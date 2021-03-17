@@ -147,6 +147,7 @@ public class NetManager {
         }
     }
 
+
     /**
      * method to view the net
      * @param net
