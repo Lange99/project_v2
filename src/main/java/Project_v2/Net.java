@@ -216,13 +216,13 @@ public class Net {
         int i;
         for (i = 0; i < net.size(); i++) {
             for (Transition t : setOfTrans) {
-                if (net.get(i).getTrans().getName().compareTo(t.getName()) == 0) {
+                if (net.get(i).getTrans().getName().compareTo(t.getName()) != 0) {
                     setOfTrans.add(net.get(i).getTrans());
                     break;
                 }
             }
             for (Place p : setOfPlace) {
-                if (net.get(i).getPlace().getName().compareTo(p.getName()) == 0) {
+                if (net.get(i).getPlace().getName().compareTo(p.getName()) != 0) {
                     setOfPlace.add(net.get(i).getPlace());
                     break;
                 }

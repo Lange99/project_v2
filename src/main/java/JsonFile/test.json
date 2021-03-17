@@ -1,0 +1,26 @@
+{
+  "@name": "retr",
+  "@net": "retr2",
+  "@pairs": [
+    {
+      "@direction": "1",
+      "@place": "bs",
+      "@transition": "t1"
+    },
+    {
+      "@direction": "0",
+      "@place": "mi",
+      "@transition": "t1"
+    },
+    {
+      "@direction": "1",
+      "@place": "mi",
+      "@transition": "t2"
+    },
+    {
+      "@direction": "0",
+      "@place": "na",
+      "@transition": "t2"
+    }
+  ]
+}
