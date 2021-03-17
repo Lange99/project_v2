@@ -20,6 +20,7 @@ public class NetManager {
     public static final String DIGIT_VALID_CHOISE = "Digit valid choise!";
     public static final String THE_NET_IS_INCORRECT_IT_CAN_T_BE_SAVED = "The net is incorrect, it can't be saved";
     public static final String THE_NET_IS_CORRECT_WE_ARE_GOING_TO_SAVE_IT = "The net is correct, we are going to save it";
+    public static final String NO_NORMAL_NET = "There aren't any nets! You have to insert or load a net before adding a Petri Net";
 
 
     private ArrayList<Net> netList = new ArrayList<Net>();
@@ -48,11 +49,12 @@ public class NetManager {
                 case 2:
                     loadNet();
                     check=Reader.yesOrNo(WANT_TO_DO_ANOTHER_OPERATION);
+
                     break;
 
                 case 3:
                     if (netList.size()==0){
-                        System.out.println("Before creating a network you need to upload one ore create a new Net");
+                        System.out.println(NO_NORMAL_NET);
                     }else{
                         addPetriNet();
                     }

@@ -48,7 +48,7 @@ public class PetriNet extends Net {
             for(i=0; i<super.getNet().size(); i++){
                 if(placeToChange.compareTo(super.getNet().get(i).getPlace().getName())==0 && transToChange.getName().compareTo(super.getNet().get(i).getTrans().getName())==0){
                     int newWeight = Reader.leggiInteroConMinimo("Insert the new Weight",1);
-                    super.getNet().get(i).setWeigth(newWeight);
+                    super.getNet().get(i).setWeight(newWeight);
                     System.out.println("\n");
                     break;
                 }

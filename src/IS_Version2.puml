@@ -1,0 +1,100 @@
+@startuml
+Main <-- NetManager
+NetManager <-- Net
+Net o-- Pair
+Pair o-- Transition
+Pair o-- Place
+Net <|-- PetriNet
+package Utility <<frame>>{
+NetManager <-- JsonReader
+NetManager <-- JsonWriter
+}
+class Main {
++ {static} main(args: String[])
+}
+
+class Net {
+- net: ArrayList<Pair>
+- ID: String
+- name: String
+- i: int
+- setOfPlace: HashSet<Place>
+- setOfTrans: HashSet<Transition>
+
++ getNet(): ArrayList<Pair>
++ getID(): String
++ getName(): String
++ addPair()
++ addPairFromJson()
++ checkPair(): boolean
++ checkPendantNode(): boolean
++ getSetOfPlace() : HashSet<Place>
++ getSetofTrans(): HashSet<Transition>
++ Net(String s)
++ checkConnect() : boolean
++ recursion(Hasmap<String, ArrayList<String>> m, Hasmap<String, Boolean> b, String k) :void
++ checkTrans(): boolean
++ fillSet(): void
+
+}
+
+class NetManager {
+- netList: ArrayList<Net>
++ manageOption()
++ addNet()
++ checkNet(Net n)
++ loadNet()
++ showNet(Net n)
+- existAlread(Hasmap<int, int> h, int i, int j)
++ loadOneNet(): Net
+}
+
+class Pair {
+- place: Place
+- trans: Transition
+- int weight
++ setWeight(i Integer): void
++ getPlace(): Place
++ getTrans(): Transition
++ compare(): boolean
+}
+
+class Place {
+- id: String
++Place()
++ getID(): String
+}
+
+class Transition {
+- id: String
+-pre: ArrayList<String>
+-post: ArrayList<String>
++ getID(): String
++ Transition
++ getIDPre: ArrayList<String>
++ getIDPost: ArrayList<String>
++ addPre:void
++ addPost: void
++ getSizePre: int
++ getSizePost: int
++ getInputOutput
+}
+
+class PetriNet{
+- initialMarking: Hasmap<String, Integer>
++ PetriNet(n Net)
++ addWeight() : void
++ addToken() : void
++ saveInitialMark(): void
+}
+
+class JsonReader {
++ {static} readJson()
+}
+
+class JsonWriter {
++ {static} writeJson()
++ {static} stringNer(Net n): String
++ {static} makeFile() : String
+}
+@enduml

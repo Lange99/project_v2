@@ -3,15 +3,9 @@ package Project_v2;
 public class Pair {
     private Place place;
     private Transition trans;
-    private int weigth = 1;
+    private int weight = 1;
 
-    public void setWeigth(int weigth) {
-        this.weigth = weigth;
-    }
 
-    public Place getPlace() {
-        return place;
-    }
 
     public  Pair(Place place, Transition trans){
         this.place=place;
@@ -31,21 +25,20 @@ public class Pair {
         return trans;
     }
 
-    /**
-     * constructor of the pair
-     * @param place_name
-     * @param trans_name
-     */
-    public Pair(String place_name, String trans_name){
-        this.place = new Place(place_name);
-        this.trans = new Transition(trans_name);
-    }
+
 
     public Pair(String place_name, String trans_name, int inOut){
         this.place = new Place(place_name);
         this.trans = new Transition(trans_name, inOut);
     }
+    public void setWeight(int weight) {
 
+        this.weight = this.weight;
+    }
+
+    public Place getPlace() {
+        return place;
+    }
     /**
      * this method check if the current pair is equal to the other one
      * @param toCompare the pair which is compared
