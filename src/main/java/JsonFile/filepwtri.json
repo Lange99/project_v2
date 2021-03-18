@@ -1,0 +1,16 @@
+{
+  "@name": "rt",
+  "@net": "rt1",
+  "@pairs": [
+    {
+      "@direction": "1",
+      "@place": "a",
+      "@transition": "c"
+    },
+    {
+      "@direction": "0",
+      "@place": "b",
+      "@transition": "c"
+    }
+  ]
+}

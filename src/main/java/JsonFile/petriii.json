@@ -1,0 +1,16 @@
+{
+  "@name": "petrinet",
+  "@net": "petrinet1",
+  "@pairs": [
+    {
+      "@direction": "1",
+      "@place": "q",
+      "@transition": "w"
+    },
+    {
+      "@direction": "0",
+      "@place": "e",
+      "@transition": "w"
+    }
+  ]
+}

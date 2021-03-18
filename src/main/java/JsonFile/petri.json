@@ -1,0 +1,16 @@
+{
+  "@name": "petriii",
+  "@net": "petriii1",
+  "@pairs": [
+    {
+      "@direction": "1",
+      "@place": "p1",
+      "@transition": "t"
+    },
+    {
+      "@direction": "0",
+      "@place": "p2",
+      "@transition": "t"
+    }
+  ]
+}
