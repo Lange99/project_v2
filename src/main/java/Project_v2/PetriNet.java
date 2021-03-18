@@ -7,7 +7,7 @@ import java.util.*;
 public class PetriNet extends Net {
     public static final String HOW_MANY_TOKEN = "How many tokens do you want this place to have?\n(if you don't want tokens enter 0)";
 
-    private static HashMap<String, Integer> initialMarking = new HashMap<>();
+    private static HashMap<Pair, Integer> initialMarking = new HashMap<>();
 
 
     public PetriNet(Net genericNet) {
@@ -104,9 +104,12 @@ public class PetriNet extends Net {
     }
 
     public void saveInitialMark(){
-        for (Place p: super.getSetOfPlace()) {
-            initialMarking.put(p.getName(), p.getNumberOfToken());
+        for(Pair p: super.getNet()){
+            initialMarking.put(p,p.getPlace().getNumberOfToken());
         }
+       /* for (Place p: super.getSetOfPlace()) {
+            initialMarking.put(p.getName(), p.getNumberOfToken());
+        }*/
     }
 
 
