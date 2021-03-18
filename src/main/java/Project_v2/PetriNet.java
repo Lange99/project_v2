@@ -9,7 +9,6 @@ public class PetriNet extends Net {
 
     private static HashMap<String, Integer> initialMarking = new HashMap<>();
 
-
     public PetriNet(Net genericNet) {
         super(genericNet);
         addWeight();
@@ -109,6 +108,8 @@ public class PetriNet extends Net {
         }
     }
 
-
+    public void addWeightToPair(Pair pair, int weight) {
+        pair.setWeight(weight);
+    }
 }
 

@@ -5,8 +5,6 @@ public class Pair {
     private Transition trans;
     private int weight = 1;
 
-
-
     public  Pair(Place place, Transition trans){
         this.place=place;
         this.trans=trans;
@@ -26,14 +24,25 @@ public class Pair {
     }
 
 
-    public Pair(String place_name, String trans_name, int inOut){
+    public Pair(String place_name, String trans_name, int direction){
         this.place = new Place(place_name);
         this.trans = new Transition(trans_name);
-        this.trans.addPreOrPost(place_name, inOut);
+        this.trans.addPreOrPost(place_name, direction);
     }
-    public void setWeight(int weight) {
 
-        this.weight = this.weight;
+    public Pair(String place_name, int token, String trans_name, int direction, int weight) {
+        this.place = new Place(place_name, token);
+        this.trans = new Transition(trans_name);
+        this.trans.addPreOrPost(place_name, direction);
+        this.weight = weight;
+    }
+
+    public void setWeight(int weight) {
+        this.weight = weight;
+    }
+
+    public int getWeight() {
+        return weight;
     }
 
     public Place getPlace() {
