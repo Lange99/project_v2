@@ -45,7 +45,7 @@ public class PetriNet extends Net {
 
             //ciclo le coppie finche non trovo quella desiderata
             for(i=0; i<super.getNet().size(); i++){
-                if(placeToChange.compareTo(super.getNet().get(i).getPlace().getName())==0 && transToChange.getName().compareTo(super.getNet().get(i).getTrans().getName())==0){
+                if(placeToChange.compareTo(super.getNet().get(i).getPlaceName())==0 && transToChange.getName().compareTo(super.getNet().get(i).getTransName())==0){
                     int newWeight = Reader.leggiInteroConMinimo("Insert the new Weight",1);
                     super.getNet().get(i).setWeight(newWeight);
                     System.out.println("\n");
@@ -104,6 +104,7 @@ public class PetriNet extends Net {
 
     public void saveInitialMark(){
         for(Pair p: super.getNet()){
+            if(p.getPlace().getNumberOfToken()!=0)
             initialMarking.put(p,p.getPlace().getNumberOfToken());
         }
        /* for (Place p: super.getSetOfPlace()) {

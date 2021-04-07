@@ -196,9 +196,9 @@ public class Net {
     public boolean checkPendantNode() {
         for (int i = 0; i < net.size(); i++) {
             boolean check = false;
-            String toCheck = net.get(i).getTrans().getName();
+            String toCheck = net.get(i).getTransName();
             for (int j = 0; j < net.size(); j++) {
-                if (i != j && toCheck.compareTo(net.get(j).getTrans().getName()) == 0) {
+                if (i != j && toCheck.compareTo(net.get(j).getTransName()) == 0) {
                     check = true;
                 }
             }
@@ -218,14 +218,14 @@ public class Net {
         boolean check = false;
         for (i = 0; i < net.size(); i++) {
             for (Transition t : setOfTrans) {
-                if (net.get(i).getTrans().getName().compareTo(t.getName()) == 0) {
+                if (net.get(i).getTransName().compareTo(t.getName()) == 0) {
                     check = true;
                 }
             }
             if(!check) setOfTrans.add(net.get(i).getTrans());
             check=false;
             for (Place p : setOfPlace) {
-                if (net.get(i).getPlace().getName().compareTo(p.getName()) == 0) {
+                if (net.get(i).getPlaceName().compareTo(p.getName()) == 0) {
                    check=true;
                 }
             }

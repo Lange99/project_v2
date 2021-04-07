@@ -1,6 +1,7 @@
 package Project_v2;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Transition {
     private String name;
@@ -61,5 +62,13 @@ public class Transition {
             if (item.equals(name))
                 ret = 0;
         return ret;
+    }
+
+    @Override
+    /**
+     * this method return the hashcode of the transition
+     */
+    public int hashCode() {
+        return Objects.hash(name);
     }
 }
