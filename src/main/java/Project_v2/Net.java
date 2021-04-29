@@ -1,16 +1,16 @@
 package Project_v2;
 
 import Utility.IO;
-//import Utility.Reader;
+
 
 import java.util.*;
 
 
 public class Net {
-//    public static final String INSERT_PLACE_S_ID = "Insert place's Name ";
-//    public static final String INSERT_TRANSITION_S_ID = "Insert transition's Name ";
-//    public static final String YOU_CAN_T_ADD_THIS_PAIR_BECAUSE_ALREADY_EXISTS = "You can't Add this pair because it already exists";
-//    public static final String YOU_WANT_ADD_ANOTHER_PAIR = "You want add another Pair?";
+    public static final String INSERT_PLACE_S_ID = "Insert place's Name ";
+    public static final String INSERT_TRANSITION_S_ID = "Insert transition's Name ";
+    public static final String YOU_CAN_T_ADD_THIS_PAIR_BECAUSE_ALREADY_EXISTS = "You can't Add this pair because it already exists";
+    public static final String YOU_WANT_ADD_ANOTHER_PAIR = "You want add another Pair?";
 
     private HashSet<Place> setOfPlace = new HashSet<Place>();
     private HashSet<Transition> setOfTrans = new HashSet<Transition>();
@@ -75,8 +75,8 @@ public class Net {
 
         do {
             // ask to user the place's ID and the transition's ID
-            placeName = IO.readNotEmpityString(IO.INSERT_PLACE_S_ID);
-            transName = IO.readNotEmpityString(IO.INSERT_TRANSITION_S_ID);
+            placeName = IO.readNotEmpityString(INSERT_PLACE_S_ID);
+            transName = IO.readNotEmpityString(INSERT_TRANSITION_S_ID);
             inOrOut = IO.readInteger("Which type of connection there is between the place " + placeName + "and the transition " + transName + "? \n 1)" + placeName + " is an INPUT of " + transName + "\n 2)" + placeName + " is an OUTPUT of " + transName + "\n", 1, 2);
             //this If check if the new node is equal to another one which is already in the net
 
@@ -146,10 +146,10 @@ public class Net {
 
                 } else {
                     //I say to the user that the pair already exists
-                    IO.print(IO.YOU_CAN_T_ADD_THIS_PAIR_BECAUSE_ALREADY_EXISTS);
+                    System.out.println(YOU_CAN_T_ADD_THIS_PAIR_BECAUSE_ALREADY_EXISTS);
                 }
             }
-        } while (IO.yesOrNo(IO.YOU_WANT_ADD_ANOTHER_PAIR));
+        } while (IO.yesOrNo(YOU_WANT_ADD_ANOTHER_PAIR));
     }
 
 

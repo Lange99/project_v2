@@ -1,13 +1,12 @@
 package Project_v2;
 
-//import Utility.Reader;
-
 import Utility.IO;
+
 
 import java.util.*;
 
 public class PetriNet extends Net {
-//    public static final String HOW_MANY_TOKEN = "How many tokens do you want this place to have?\n(if you don't want tokens enter 0)";
+    public static final String HOW_MANY_TOKEN = "How many tokens do you want this place to have?\n(if you don't want tokens enter 0)";
 
     private static HashMap<Pair, Integer> initialMarking = new HashMap<>();
 
@@ -23,29 +22,35 @@ public class PetriNet extends Net {
         int i;
         while (IO.yesOrNo("You want change the weight of pair?")) {
             //stampo tutte le transizioni
-            for (i = 0; i < transTemp.size(); i++) {
-                IO.print(i + ") " + transTemp.get(i).getName());
-            }
+            //TODO metodo che permette la scelta
+            //TODO: CAMBIARE POSIZIONE
+            IO.printTransition(transTemp);
             //salvo una transizione
-            Transition transToChange = transTemp.get(IO.readInteger("What transition you want change?", 0, i));
+            Transition transToChange = transTemp.get(IO.readInteger("What transition you want change?", 0, transTemp.size()));
             i = 0;
 
             //creo un array temporaneo di  posti e stampo tutti i posti associati a quella transizione
-            IO.print("the place connected to " + transToChange.getName() + ":");
+            System.out.println("the place connected to " + transToChange.getName() + ":");
             ArrayList<String> placeTemp = new ArrayList<>();
+            //TODO: CAMBIARE POSiZIONE
+            IO.printString(transToChange.getIdPre());
+
+            //QUESTO FOR SERVE PERCHé C'è ADD
             for (String placeName : transToChange.getIdPre()) {
                 placeTemp.add(placeName);
-                IO.print(i + ") " + placeName);
-                i++;
             }
+
+            //TODO: CAMBIARE POSiZIONE
+            IO.printString(transToChange.getIdPost());
+
             for (String placeName : transToChange.getIdPost()) {
                 placeTemp.add(placeName);
-                IO.print(i + ") " + placeName);
-                i++;
+
             }
             String placeToChange = placeTemp.get(IO.readInteger("What place you want change?", 0, i));
 
             //ciclo le coppie finche non trovo quella desiderata
+            //TODO: refattorizzare un botto
             for(i=0; i<super.getNet().size(); i++){
                 if(placeToChange.compareTo(super.getNet().get(i).getPlaceName())==0 && transToChange.getName().compareTo(super.getNet().get(i).getTransName())==0){
                     int newWeight = IO.readIntegerWithMin("Insert the new Weight",1);
@@ -71,14 +76,14 @@ public class PetriNet extends Net {
             do {
                 i = 0;
                 //Stampo tutte le alternative
-                IO.print("Place:");
-                for (Place place : super.getSetOfPlace()) {
-                    IO.print(i + ") " + place.getName());
-                    i++;
-                }
+                System.out.println("Place:");
+                IO.printPlace(super.getSetOfPlace());
+
+
 
                 int choise = IO.readInteger("where do you want to add the tokens?", 0, i-1);
                 placeId = tempPlace.get(choise).getName();
+
 
                 //inizio ricerca per vedere se esiste
                 for (Place place : super.getSetOfPlace()) {
@@ -89,7 +94,7 @@ public class PetriNet extends Net {
                 }
                 //Se check è falso non l'ha trovato, stampo l'error e ricomincio
                 if (check == false) {
-                    IO.print("ERROR, WRONG ID");
+                    System.out.println("ERROR, WRONG ID");
                 } else { //se check è true la ricerca è andata a buon fine, posso chiedere all'utente il peso della transizione e modificarla nella rete
                     token = IO.readIntegerWithMin("Insert the number of tokens: ", 0);
                     for (Place p : super.getSetOfPlace()) {

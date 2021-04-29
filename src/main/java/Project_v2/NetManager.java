@@ -2,7 +2,7 @@ package Project_v2;
 import Utility.IO;
 import Utility.JsonReader;
 import Utility.JsonWriter;
-//import Utility.Reader;
+
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -11,22 +11,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static Utility.IO.JSON_FILE;
-import static Utility.IO.JSON_PETRI_FILE;
-
 public class NetManager {
-//    public static final String ANOTHER_NET = "You want add another Net?";
-//    public static final String NAME_OF_NET = "Add the name of Net:";
-//    public static final String MENU = "What do you want do?\n0)EXIT\n1)Add new Net\n2)Load net\n3)Create a new Petri's Net";
-//    public static final String WANT_TO_DO_ANOTHER_OPERATION = "you want to do another operation ";
-//    public static final String SAVE_NET = "Do you want to save the net that you have already made? ";
-//    public static final String DIGIT_YOUR_CHOISE = "Digit your choise ";
-//    public static final String DIGIT_VALID_CHOISE = "Digit valid choise!";
-//    public static final String THE_NET_IS_INCORRECT_IT_CAN_T_BE_SAVED = "The net is incorrect, it can't be saved";
-//    public static final String THE_NET_IS_CORRECT_WE_ARE_GOING_TO_SAVE_IT = "The net is correct, we are going to save it";
-//    public static final String NO_NORMAL_NET = "There aren't any nets! You have to insert or load a net before adding a Petri Net";
-//    public static final String JSON_FILE = "src/main/java/JsonFile";
-//    public static final String JSON_PETRI_FILE = "src/main/java/JsonPetri";
+    public static final String ANOTHER_NET = "You want add another Net?";
+    public static final String NAME_OF_NET = "Add the name of Net:";
+    public static final String MENU = "What do you want do?\n0)EXIT\n1)Add new Net\n2)Load net\n3)Create a new Petri's Net";
+    public static final String WANT_TO_DO_ANOTHER_OPERATION = "you want to do another operation ";
+    public static final String SAVE_NET = "Do you want to save the net that you have already made? ";
+    public static final String DIGIT_YOUR_CHOISE = "Digit your choise ";
+    public static final String DIGIT_VALID_CHOISE = "Digit valid choise!";
+    public static final String THE_NET_IS_INCORRECT_IT_CAN_T_BE_SAVED = "The net is incorrect, it can't be saved";
+    public static final String THE_NET_IS_CORRECT_WE_ARE_GOING_TO_SAVE_IT = "The net is correct, we are going to save it";
+    public static final String NO_NORMAL_NET = "There aren't any nets! You have to insert or load a net before adding a Petri Net";
+    public static final String JSON_FILE = "src/main/java/JsonFile";
+    public static final String JSON_PETRI_FILE = "src/main/java/JsonPetri";
+    public static final String TYPE_OF_NET = "Do you want load:\n1) simple net\n2) Petri Net\n";
+    public static final String THERE_AREN_T_ANY_FILES_TO_LOAD = "There aren't any files to load";
 
 
     private ArrayList<Net> netList = new ArrayList<Net>();
@@ -35,7 +34,7 @@ public class NetManager {
         boolean check=true;
         int choise=0;
         do {
-            IO.print(IO.MENU);
+           IO.print(IO.MENU);
             choise = IO.readNumber(IO.DIGIT_YOUR_CHOISE);
             while(choise<0 || choise>4){
                 IO.print(IO.DIGIT_VALID_CHOISE);
@@ -53,11 +52,11 @@ public class NetManager {
                     break;
 
                 case 2:
-                    int typeNet = IO.readInteger("Do you want load:\n1) simple net\n2) Petri Net\n", 1, 2);
+                    int typeNet = IO.readInteger(IO.TYPE_OF_NET, 1, 2);
                     if (typeNet==1)
-                        loadNet(JSON_FILE);
+                        loadNet(IO.JSON_FILE);
                     else
-                        loadNet(JSON_PETRI_FILE);
+                        loadNet(IO.JSON_PETRI_FILE);
                     check=IO.yesOrNo(IO.WANT_TO_DO_ANOTHER_OPERATION);
 
                     break;
@@ -142,7 +141,7 @@ public class NetManager {
 
         //if there are not files in the directory print this
         if (i==0) {
-            IO.print("There aren't any files to load");
+           IO.print(IO.THERE_AREN_T_ANY_FILES_TO_LOAD);
         }
         else {
             //else ask to user to chose which file load
@@ -154,8 +153,8 @@ public class NetManager {
                 Net newNet = JsonReader.readPetriJson(path);
                 //add new net to the list of the net
                 netList.add(newNet);
-                IO.print("File is loaded");
-                IO.print("Visualizzazione della lista");
+                IO.print(IO.FILE_IS_LOADED);
+                IO.print(IO.VISUALIZE_THE_LIST);
                 //view the new net
                 showPetriNet(newNet);
             }
@@ -163,8 +162,8 @@ public class NetManager {
                 Net newNet = JsonReader.readJson(path);
                 //add new net to the list of the net
                 netList.add(newNet);
-                IO.print("File is loaded");
-                IO.print("Visualizzazione della lista");
+                System.out.println(IO.FILE_IS_LOADED);
+                System.out.println(IO.VISUALIZE_THE_LIST);
                 //view the new net
                 showNet(newNet);
             }
@@ -243,12 +242,12 @@ public class NetManager {
         }
 
         //print the name and id and print all the pairs with their transition
-        IO.print("\nName net: "+nameNet+"\t\tID net: "+idNet);
+       IO.print("\nName net: "+nameNet+"\t\tID net: "+idNet);
         IO.print("List pairs:");
         for (String s: couples) {
             IO.print("\t"+s);
         }
-        IO.print("");
+        System.out.println();
     }
 
     private static boolean existAlready(HashMap<Integer, Integer> index, int i, int j) {
@@ -341,7 +340,7 @@ public class NetManager {
         for (String s: couples) {
             IO.print("\t"+s);
         }
-        IO.print("");
+       IO.print("");
 
     }
 
@@ -349,7 +348,7 @@ public class NetManager {
     public Net loadOneNet(){
 
         for (int i =0; i<netList.size(); i++){
-            IO.print(i+") " + netList.get(i).getName());
+            System.out.println(i+") " + netList.get(i).getName());
         }
         int choise = IO.readInteger("choose the network number ", 0, netList.size());
         return netList.get(choise);
