@@ -1,11 +1,13 @@
 package Project_v2;
 
-import Utility.Reader;
+//import Utility.Reader;
+
+import Utility.IO;
 
 import java.util.*;
 
 public class PetriNet extends Net {
-    public static final String HOW_MANY_TOKEN = "How many tokens do you want this place to have?\n(if you don't want tokens enter 0)";
+//    public static final String HOW_MANY_TOKEN = "How many tokens do you want this place to have?\n(if you don't want tokens enter 0)";
 
     private static HashMap<Pair, Integer> initialMarking = new HashMap<>();
 
@@ -19,36 +21,36 @@ public class PetriNet extends Net {
     public void addWeight() {
         ArrayList<Transition> transTemp = new ArrayList<>(super.getSetOfTrans());
         int i;
-        while (Reader.yesOrNo("You want change the weight of pair?")) {
+        while (IO.yesOrNo("You want change the weight of pair?")) {
             //stampo tutte le transizioni
             for (i = 0; i < transTemp.size(); i++) {
-                System.out.println(i + ") " + transTemp.get(i).getName());
+                IO.print(i + ") " + transTemp.get(i).getName());
             }
             //salvo una transizione
-            Transition transToChange = transTemp.get(Reader.leggiIntero("What transition you want change?", 0, i));
+            Transition transToChange = transTemp.get(IO.readInteger("What transition you want change?", 0, i));
             i = 0;
 
             //creo un array temporaneo di  posti e stampo tutti i posti associati a quella transizione
-            System.out.println("the place connected to " + transToChange.getName() + ":");
+            IO.print("the place connected to " + transToChange.getName() + ":");
             ArrayList<String> placeTemp = new ArrayList<>();
             for (String placeName : transToChange.getIdPre()) {
                 placeTemp.add(placeName);
-                System.out.println(i + ") " + placeName);
+                IO.print(i + ") " + placeName);
                 i++;
             }
             for (String placeName : transToChange.getIdPost()) {
                 placeTemp.add(placeName);
-                System.out.println(i + ") " + placeName);
+                IO.print(i + ") " + placeName);
                 i++;
             }
-            String placeToChange = placeTemp.get(Reader.leggiIntero("What place you want change?", 0, i));
+            String placeToChange = placeTemp.get(IO.readInteger("What place you want change?", 0, i));
 
             //ciclo le coppie finche non trovo quella desiderata
             for(i=0; i<super.getNet().size(); i++){
                 if(placeToChange.compareTo(super.getNet().get(i).getPlaceName())==0 && transToChange.getName().compareTo(super.getNet().get(i).getTransName())==0){
-                    int newWeight = Reader.leggiInteroConMinimo("Insert the new Weight",1);
+                    int newWeight = IO.readIntegerWithMin("Insert the new Weight",1);
                     super.getNet().get(i).setWeight(newWeight);
-                    System.out.println("\n");
+                    IO.print("\n");
                     break;
                 }
             }
@@ -65,17 +67,17 @@ public class PetriNet extends Net {
         boolean again = true;
         int i;
 
-        while(Reader.yesOrNo("You want to add tokens in the Petri's net?")) {
+        while(IO.yesOrNo("You want to add tokens in the Petri's net?")) {
             do {
                 i = 0;
                 //Stampo tutte le alternative
-                System.out.println("Place:");
+                IO.print("Place:");
                 for (Place place : super.getSetOfPlace()) {
-                    System.out.println(i + ") " + place.getName());
+                    IO.print(i + ") " + place.getName());
                     i++;
                 }
 
-                int choise = Reader.leggiIntero("where do you want to add the tokens?", 0, i-1);
+                int choise = IO.readInteger("where do you want to add the tokens?", 0, i-1);
                 placeId = tempPlace.get(choise).getName();
 
                 //inizio ricerca per vedere se esiste
@@ -87,9 +89,9 @@ public class PetriNet extends Net {
                 }
                 //Se check è falso non l'ha trovato, stampo l'error e ricomincio
                 if (check == false) {
-                    System.out.println("ERROR, WRONG ID");
+                    IO.print("ERROR, WRONG ID");
                 } else { //se check è true la ricerca è andata a buon fine, posso chiedere all'utente il peso della transizione e modificarla nella rete
-                    token = Reader.leggiInteroConMinimo("Insert the number of tokens: ", 0);
+                    token = IO.readIntegerWithMin("Insert the number of tokens: ", 0);
                     for (Place p : super.getSetOfPlace()) {
                         if (p.getName().compareTo(placeId) == 0) {
                             p.setToken(token);
