@@ -1,15 +1,23 @@
 package Utility;
 
+import Project_v2.Place;
+import Project_v2.Transition;
+
 import java.io.File;
-import java.util.InputMismatchException;
-import java.util.Scanner;
+import java.util.*;
 
 public class IO {
+    public static final String THERE_AREN_T_ANY_FILES_TO_LOAD = "There aren't any files to load";
     public static final String INSERT_PLACE_S_ID = "Insert place's Name ";
     public static final String INSERT_TRANSITION_S_ID = "Insert transition's Name ";
     public static final String YOU_CAN_T_ADD_THIS_PAIR_BECAUSE_ALREADY_EXISTS = "You can't Add this pair because it already exists";
     public static final String YOU_WANT_ADD_ANOTHER_PAIR = "You want add another Pair?";
     public static final String WRITING_FILE_ERROR = "writing file error.";
+    public static final String TYPE_OF_NET = "Do you want load:\n1) simple net\n2) Petri Net\n" ;
+    public static final String FILE_IS_LOADED = "File is loaded";
+    public static final String VISUALIZE_THE_LIST = "Visualize the list";
+    public static final String ADD_WEIGHT = "Do you want to add weight to the transition? If you say no we insert the default value";
+    public static final String TRANSITION_CHOOSE = "These are the transition in the Net, do you have to choose which one modify: (insert the number)" ;
     private static final String path = new File("src/main/java/JsonFile").getAbsolutePath();
     private static final String petriPath = new File("src/main/java/JsonPetri").getAbsolutePath();
     public static final String ANOTHER_NET = "You want add another Net?";
@@ -169,5 +177,30 @@ public class IO {
     public static String ReadString(String message) {
         print(message);
         return reader.next();
+    }
+
+    public static void printPlace(Iterable<Place> list){
+        int i=1;
+
+        for(Place p:list){
+            IO.print(i+") "+ p.getName());
+            i++;
+        }
+
+    }
+    public static void printTransition(Iterable<Transition> list){
+        int i=1;
+
+        for(Transition t:list){
+            IO.print(i+") "+ t.getName());
+            i++;
+        }
+    }
+
+
+    public static void printString(List<String> list) {
+        for(int i=0; i<list.size();i++){
+            IO.print((i+1)+") "+list.get(i));
+        }
     }
 }

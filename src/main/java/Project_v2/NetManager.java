@@ -1,8 +1,9 @@
 package Project_v2;
+
 import Utility.IO;
 import Utility.JsonReader;
 import Utility.JsonWriter;
-//import Utility.Reader;
+
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -11,76 +12,136 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static Utility.IO.JSON_FILE;
-import static Utility.IO.JSON_PETRI_FILE;
-
 public class NetManager {
-//    public static final String ANOTHER_NET = "You want add another Net?";
-//    public static final String NAME_OF_NET = "Add the name of Net:";
-//    public static final String MENU = "What do you want do?\n0)EXIT\n1)Add new Net\n2)Load net\n3)Create a new Petri's Net";
-//    public static final String WANT_TO_DO_ANOTHER_OPERATION = "you want to do another operation ";
-//    public static final String SAVE_NET = "Do you want to save the net that you have already made? ";
-//    public static final String DIGIT_YOUR_CHOISE = "Digit your choise ";
-//    public static final String DIGIT_VALID_CHOISE = "Digit valid choise!";
-//    public static final String THE_NET_IS_INCORRECT_IT_CAN_T_BE_SAVED = "The net is incorrect, it can't be saved";
-//    public static final String THE_NET_IS_CORRECT_WE_ARE_GOING_TO_SAVE_IT = "The net is correct, we are going to save it";
-//    public static final String NO_NORMAL_NET = "There aren't any nets! You have to insert or load a net before adding a Petri Net";
-//    public static final String JSON_FILE = "src/main/java/JsonFile";
-//    public static final String JSON_PETRI_FILE = "src/main/java/JsonPetri";
+    public static final String ANOTHER_NET = "You want add another Net?";
+    public static final String NAME_OF_NET = "Add the name of Net:";
+    public static final String MENU = "What do you want do?\n0)EXIT\n1)Add new Net\n2)Load net\n3)Create a new Petri's Net";
+    public static final String WANT_TO_DO_ANOTHER_OPERATION = "you want to do another operation ";
+    public static final String SAVE_NET = "Do you want to save the net that you have already made? ";
+    public static final String DIGIT_YOUR_CHOISE = "Digit your choise ";
+    public static final String DIGIT_VALID_CHOISE = "Digit valid choise!";
+    public static final String THE_NET_IS_INCORRECT_IT_CAN_T_BE_SAVED = "The net is incorrect, it can't be saved";
+    public static final String THE_NET_IS_CORRECT_WE_ARE_GOING_TO_SAVE_IT = "The net is correct, we are going to save it";
+    public static final String NO_NORMAL_NET = "There aren't any nets! You have to insert or load a net before adding a Petri Net";
+    public static final String JSON_FILE = "src/main/java/JsonFile";
+    public static final String JSON_PETRI_FILE = "src/main/java/JsonPetri";
+    public static final String TYPE_OF_NET = "Do you want load:\n1) simple net\n2) Petri Net\n";
+    public static final String THERE_AREN_T_ANY_FILES_TO_LOAD = "There aren't any files to load";
 
 
     private ArrayList<Net> netList = new ArrayList<Net>();
 
     public void menageOption() throws IOException {
-        boolean check=true;
-        int choise=0;
+        boolean check = true;
+        int choise = 0;
         do {
             IO.print(IO.MENU);
             choise = IO.readNumber(IO.DIGIT_YOUR_CHOISE);
-            while(choise<0 || choise>4){
+            while (choise < 0 || choise > 4) {
                 IO.print(IO.DIGIT_VALID_CHOISE);
-                choise=IO.readNumber(IO.DIGIT_YOUR_CHOISE);
+                choise = IO.readNumber(IO.DIGIT_YOUR_CHOISE);
             }
 
-            switch (choise){
+            switch (choise) {
                 case 0:
-                    check=false;
+                    check = false;
                     break;
                 case 1:
 
                     addNet();
-                    check=IO.yesOrNo(IO.WANT_TO_DO_ANOTHER_OPERATION);
+                    check = IO.yesOrNo(IO.WANT_TO_DO_ANOTHER_OPERATION);
                     break;
 
                 case 2:
-                    int typeNet = IO.readInteger("Do you want load:\n1) simple net\n2) Petri Net\n", 1, 2);
-                    if (typeNet==1)
-                        loadNet(JSON_FILE);
+                    int typeNet = IO.readInteger(IO.TYPE_OF_NET, 1, 2);
+                    if (typeNet == 1)
+                        loadNet(IO.JSON_FILE);
                     else
-                        loadNet(JSON_PETRI_FILE);
-                    check=IO.yesOrNo(IO.WANT_TO_DO_ANOTHER_OPERATION);
+                        loadNet(IO.JSON_PETRI_FILE);
+                    check = IO.yesOrNo(IO.WANT_TO_DO_ANOTHER_OPERATION);
 
                     break;
 
                 case 3:
-                    if (netList.size()==0){
+                    if (netList.size() == 0) {
                         IO.print(IO.NO_NORMAL_NET);
-                    }else{
+                    } else {
                         addPetriNet();
                     }
                     break;
 
             }
-        }while(check==true);
+        } while (check == true);
 
     }
 
 
     //Metodo per la creazione di petri net;
-    public void addPetriNet(){
+    public void addPetriNet() {
         PetriNet newPetriNet = new PetriNet(loadOneNet());
+        //we add the token to the place
+        while (IO.yesOrNo("Do you want to add token to place ? ")){
+            addTokentoPetriNet(newPetriNet);
+        }
+
+
+        //we add the weight to the transition
+        addWeightToPetriNet(newPetriNet);
+
+
         JsonWriter.writeJsonPetri(newPetriNet);
         netList.add(newPetriNet);
+    }
+
+    private void addWeightToPetriNet(PetriNet newPetriNet) {
+
+        while (IO.yesOrNo(IO.ADD_WEIGHT)) {
+            ArrayList<Transition> transTemp = new ArrayList<>(newPetriNet.getSetOfTrans());
+
+            //qua scelgo la transizione da modificare
+            IO.printTransition(transTemp);
+            int choose = IO.readInteger(IO.TRANSITION_CHOOSE, 0, transTemp.size())-1;
+
+            //qui mostro i pre e i post della transizione collegata
+            ArrayList<String> placeTemp = new ArrayList<>();
+            placeTemp.addAll(transTemp.get(choose).getIdPre());
+            placeTemp.addAll(transTemp.get(choose).getIdPost());
+
+            do {
+
+
+                IO.printString(placeTemp);
+
+                //qui chiedo quale transazione-posto vuole modificare
+                String placeToChange = placeTemp.get(IO.readInteger("What place you want change?", 0, placeTemp.size())-1);
+                int weight = IO.readIntegerWithMin("Insert the weight that you want to give to the place", 0);
+                newPetriNet.addWeight(transTemp.get(choose).getName(), placeToChange, weight);
+            }while(IO.yesOrNo("Do you want to add other weights to this transition?"));
+
+
+
+        }
+
+    }
+
+    private void addTokentoPetriNet(PetriNet newPetriNet) {
+
+        ArrayList<Place> tempPlace = new ArrayList<>(newPetriNet.getSetOfPlace());
+
+
+        IO.printPlace(newPetriNet.getSetOfPlace());
+        int choise = IO.readInteger("where do you want to add the tokens?", 0, tempPlace.size());
+        int token = IO.readIntegerWithMin("Insert the number of tokens: ", 0);
+
+        String  placeId = tempPlace.get(choise).getName();
+
+        if(newPetriNet.addToken(placeId, token)){
+            IO.print("The weight has been added");
+        }else{
+            IO.print("The place doesn't exist");
+        }
+
+
     }
 
     /**
@@ -89,17 +150,17 @@ public class NetManager {
     public void addNet() {
 
         do {
-            Net n= new Net(IO.readNotEmpityString(IO.NAME_OF_NET));
+            Net n = new Net(IO.readNotEmpityString(IO.NAME_OF_NET));
             //if the new net is correct we show it to the user and ask if he wants to save it
-            if(checkNet(n) && n.checkTrans() && n.checkConnect()) {
+            if (checkNet(n) && n.checkTrans() && n.checkConnect()) {
                 showNet(n);
                 IO.print(IO.THE_NET_IS_CORRECT_WE_ARE_GOING_TO_SAVE_IT);
                 netList.add(n);
 
-                if(IO.yesOrNo(IO.SAVE_NET)){
+                if (IO.yesOrNo(IO.SAVE_NET)) {
                     JsonWriter.writeJsonFile(n);
                 }
-            }else{
+            } else {
                 //if the net is incorrect we inform the user
                 IO.print(IO.THE_NET_IS_INCORRECT_IT_CAN_T_BE_SAVED);
             }
@@ -108,21 +169,23 @@ public class NetManager {
 
     /**
      * the method check if there is only a place connect to a transition
+     *
      * @param n the net we have to check
      * @return false if there are some problems and if there is one or more pendant connection
      */
-    public boolean checkNet(Net n){
+    public boolean checkNet(Net n) {
 //if there is a problem the method return false
-        if(n.checkPendantNode()==false){
+        if (n.checkPendantNode() == false) {
 
             return false;
-        }else{
+        } else {
             return true;
         }
     }
 
     /**
      * method to load a net by json file
+     *
      * @throws FileNotFoundException
      */
     public void loadNet(String pathNet) throws FileNotFoundException {
@@ -134,46 +197,46 @@ public class NetManager {
         int i = 0;
         //for every name file in the directory print the name
         if (pathname != null) {
-            for (String s: pathname) {
+            for (String s : pathname) {
                 i++;
-                IO.print(i+") "+s);
+                IO.print(i + ") " + s);
             }
         }
 
         //if there are not files in the directory print this
-        if (i==0) {
-            IO.print("There aren't any files to load");
-        }
-        else {
+        if (i == 0) {
+            IO.print(IO.THERE_AREN_T_ANY_FILES_TO_LOAD);
+        } else {
             //else ask to user to chose which file load
             int number = IO.readInteger("Insert the id of the file you want to load ", 1, i);
             //get the name of file by the pathname string array and decrement 1 because the print file start with 1
-            String path = pathNet+"/"+pathname[number-1];
+            String path = pathNet + "/" + pathname[number - 1];
 
             if (pathNet.equals(JSON_PETRI_FILE)) {
                 Net newNet = JsonReader.readPetriJson(path);
                 //add new net to the list of the net
                 netList.add(newNet);
-                IO.print("File is loaded");
-                IO.print("Visualizzazione della lista");
+                IO.print(IO.FILE_IS_LOADED);
+                IO.print(IO.VISUALIZE_THE_LIST);
                 //view the new net
                 showPetriNet(newNet);
-            }
-            else {
+            } else {
                 Net newNet = JsonReader.readJson(path);
                 //add new net to the list of the net
                 netList.add(newNet);
-                IO.print("File is loaded");
-                IO.print("Visualizzazione della lista");
+                System.out.println(IO.FILE_IS_LOADED);
+                System.out.println(IO.VISUALIZE_THE_LIST);
                 //view the new net
                 showNet(newNet);
             }
         }
     }
 
+    //TODO: PENSO SIA MEGLIO SPOSTARLO IN IO
 
     /**
      * method to view the net
+     *
      * @param net
      */
     public void showNet(Net net) {
@@ -186,7 +249,7 @@ public class NetManager {
         ArrayList<Integer> directions = new ArrayList<>();
 
         //for every pair in the net get the name of place and name of transition
-        for (Pair p: net.getNet()) {
+        for (Pair p : net.getNet()) {
             String place = p.getPlace().getName();
             String trans = p.getTrans().getName();
             int direction = p.getTrans().getInputOutput(p.getPlace().getName());
@@ -207,13 +270,12 @@ public class NetManager {
                     //if the transition in i position is equal to the transition in j position, put the index i and j put the index i and j in the hashmap of index
                     if (transitions.get(i).equals(transitions.get(j))) {
                         int dir = directions.get(i);
-                        if (dir==1) {
+                        if (dir == 1) {
                             if (!existAlready(index, i, j)) {
                                 index.put(i, j);
                                 order.add(0);
                             }
-                        }
-                        else {
+                        } else {
                             if (!existAlready(index, i, j)) {
                                 index.put(i, j);
                                 order.add(1);
@@ -230,12 +292,11 @@ public class NetManager {
         //for every element in indexUpdate initialize a String that contains the two place and the transition in common
         int i = 0;
         String couple = "";
-        for (Map.Entry<Integer, Integer> entry: index.entrySet()) {
+        for (Map.Entry<Integer, Integer> entry : index.entrySet()) {
             if (order.get(i) == 0) {
-                couple = places.get(entry.getKey())+"----->"+transitions.get(entry.getValue());
-            }
-            else {
-                couple = places.get(entry.getKey())+"<-----"+transitions.get(entry.getValue());
+                couple = places.get(entry.getKey()) + "----->" + transitions.get(entry.getValue());
+            } else {
+                couple = places.get(entry.getKey()) + "<-----" + transitions.get(entry.getValue());
             }
             //add the string to the arraylist
             couples.add(couple);
@@ -243,17 +304,17 @@ public class NetManager {
         }
 
         //print the name and id and print all the pairs with their transition
-        IO.print("\nName net: "+nameNet+"\t\tID net: "+idNet);
+        IO.print("\nName net: " + nameNet + "\t\tID net: " + idNet);
         IO.print("List pairs:");
-        for (String s: couples) {
-            IO.print("\t"+s);
+        for (String s : couples) {
+            IO.print("\t" + s);
         }
-        IO.print("");
+        System.out.println();
     }
 
     private static boolean existAlready(HashMap<Integer, Integer> index, int i, int j) {
         boolean ctrl = false;
-        for (Map.Entry<Integer, Integer> entry: index.entrySet()) {
+        for (Map.Entry<Integer, Integer> entry : index.entrySet()) {
             if (entry.getKey() == i) {
                 if (entry.getValue() == j) {
                     ctrl = true;
@@ -263,6 +324,7 @@ public class NetManager {
         return ctrl;
     }
 
+    //TODO: PENSO SIA MEGLIO SPOSTARLO IN IO
     public void showPetriNet(Net net) {
         //get name and if of the net
         String nameNet = net.getName();
@@ -275,7 +337,7 @@ public class NetManager {
         ArrayList<Integer> directions = new ArrayList<>();
 
         //for every pair in the net get the name of place and name of transition
-        for (Pair p: net.getNet()) {
+        for (Pair p : net.getNet()) {
             String place = p.getPlace().getName();
             String trans = p.getTrans().getName();
             String tokenPlace = Integer.toString(p.getPlace().getNumberOfToken());
@@ -300,13 +362,12 @@ public class NetManager {
                     //if the transition in i position is equal to the transition in j position, put the index i and j put the index i and j in the hashmap of index
                     if (transitions.get(i).equals(transitions.get(j))) {
                         int dir = directions.get(i);
-                        if (dir==1) {
+                        if (dir == 1) {
                             if (!existAlready(index, i, j)) {
                                 index.put(i, j);
                                 order.add(0);
                             }
-                        }
-                        else {
+                        } else {
                             if (!existAlready(index, i, j)) {
                                 index.put(i, j);
                                 order.add(1);
@@ -323,12 +384,11 @@ public class NetManager {
         //for every element in indexUpdate initialize a String that contains the two place and the transition in common
         int i = 0;
         String couple = "";
-        for (Map.Entry<Integer, Integer> entry: index.entrySet()) {
+        for (Map.Entry<Integer, Integer> entry : index.entrySet()) {
             if (order.get(i) == 0) {
-                couple = places.get(entry.getKey())+" <"+tokens.get(i)+"> ----------<"+weights.get(i)+">----------▶ "+transitions.get(entry.getValue());
-            }
-            else {
-                couple = places.get(entry.getKey())+" <"+tokens.get(i)+"> ◀︎----------<"+weights.get(i)+">---------- "+transitions.get(entry.getValue());
+                couple = places.get(entry.getKey()) + " <" + tokens.get(i) + "> ----------<" + weights.get(i) + ">----------▶ " + transitions.get(entry.getValue());
+            } else {
+                couple = places.get(entry.getKey()) + " <" + tokens.get(i) + "> ◀︎----------<" + weights.get(i) + ">---------- " + transitions.get(entry.getValue());
             }
             //add the string to the arraylist
             couples.add(couple);
@@ -336,20 +396,20 @@ public class NetManager {
         }
 
         //print the name and id and print all the pairs with their transition
-        IO.print("\nName net: "+nameNet+"\t\tID net: "+idNet);
+        IO.print("\nName net: " + nameNet + "\t\tID net: " + idNet);
         IO.print("List pairs:");
-        for (String s: couples) {
-            IO.print("\t"+s);
+        for (String s : couples) {
+            IO.print("\t" + s);
         }
         IO.print("");
 
     }
 
     //metodo che stampa tutte le net in netlist e ne restituisce una scelta dall'utente
-    public Net loadOneNet(){
+    public Net loadOneNet() {
 
-        for (int i =0; i<netList.size(); i++){
-            IO.print(i+") " + netList.get(i).getName());
+        for (int i = 0; i < netList.size(); i++) {
+            System.out.println(i + ") " + netList.get(i).getName());
         }
         int choise = IO.readInteger("choose the network number ", 0, netList.size());
         return netList.get(choise);
