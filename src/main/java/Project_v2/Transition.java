@@ -1,4 +1,4 @@
-package Project_v2;
+package main.java.Project_v2;
 
 import java.util.ArrayList;
 import java.util.Objects;

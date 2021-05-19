@@ -1,5 +1,4 @@
-package Project_v2;
-
+package main.java.Project_v2;
 public class Pair {
     private Place place;
     private Transition trans;

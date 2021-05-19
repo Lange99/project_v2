@@ -1,14 +1,25 @@
-package Utility;
+package main.java.Utility;
 
-import Project_v2.Net;
-import Project_v2.Pair;
-import Project_v2.Place;
-import Project_v2.Transition;
+
+import main.java.Project_v2.Net;
+import main.java.Project_v2.Pair;
+import main.java.Project_v2.Place;
+import main.java.Project_v2.Transition;
+import main.java.Utility.JsonManager;
 
 import java.io.File;
 import java.util.*;
 
 public class IO {
+    public static final String DO_YOU_WANT_TO_ADD_TOKEN_TO_PLACE = "Do you want to add token to place ? ";
+    public static final String WHAT_PLACE_YOU_WANT_CHANGE = "What place you want change?";
+    public static final String INSERT_THE_WEIGHT_THAT_YOU_WANT_TO_GIVE_TO_THE_PLACE = "Insert the weight that you want to give to the place";
+    public static final String DO_YOU_WANT_TO_ADD_OTHER_WEIGHTS_TO_THIS_TRANSITION = "Do you want to add other weights to this transition?";
+    public static final String WHERE_DO_YOU_WANT_TO_ADD_THE_TOKENS = "where do you want to add the tokens?";
+    public static final String INSERT_THE_NUMBER_OF_TOKENS = "Insert the number of tokens: ";
+    public static final String THE_WEIGHT_HAS_BEEN_ADDED = "The weight has been added";
+    public static final String THE_PLACE_DOESN_T_EXIST = "The place doesn't exist";
+    public static final String CHOOSE_THE_NETWORK_NUMBER_ = "choose the network number ";
     public static final String THERE_AREN_T_ANY_FILES_TO_LOAD = "There aren't any files to load";
     public static final String INSERT_PLACE_S_ID = "Insert place's Name ";
     public static final String INSERT_TRANSITION_S_ID = "Insert transition's Name ";
@@ -369,4 +380,10 @@ public class IO {
         System.out.println();
     }
 
+    public static void printNet(Iterable<Net> netList) {
+    for (Net n: netList){
+        print(n.getName());
+    }
+
+    }
 }

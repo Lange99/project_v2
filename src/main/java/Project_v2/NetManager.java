@@ -1,32 +1,13 @@
-package Project_v2;
+package main.java.Project_v2;
 
-import Utility.IO;
-import Utility.JsonManager;
-import Utility.JsonReader;
-import Utility.JsonWriter;
+import main.java.Utility.*;
 
-
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+
 
 public class NetManager {
-    public static final String ANOTHER_NET = "You want add another Net?";
-    public static final String NAME_OF_NET = "Add the name of Net:";
-    public static final String MENU = "What do you want do?\n0)EXIT\n1)Add new Net\n2)Load net\n3)Create a new Petri's Net";
-    public static final String WANT_TO_DO_ANOTHER_OPERATION = "you want to do another operation ";
-    public static final String SAVE_NET = "Do you want to save the net that you have already made? ";
-    public static final String DIGIT_YOUR_CHOISE = "Digit your choise ";
-    public static final String DIGIT_VALID_CHOISE = "Digit valid choise!";
-    public static final String THE_NET_IS_INCORRECT_IT_CAN_T_BE_SAVED = "The net is incorrect, it can't be saved";
-    public static final String THE_NET_IS_CORRECT_WE_ARE_GOING_TO_SAVE_IT = "The net is correct, we are going to save it";
-    public static final String NO_NORMAL_NET = "There aren't any nets! You have to insert or load a net before adding a Petri Net";
-    public static final String JSON_FILE = "src/main/java/JsonFile";
-    public static final String TYPE_OF_NET = "Do you want load:\n1) simple net\n2) Petri Net\n";
-    public static final String THERE_AREN_T_ANY_FILES_TO_LOAD = "There aren't any files to load";
+
 
 
     private ArrayList<Net> netList = new ArrayList<Net>();
@@ -90,7 +71,7 @@ public class NetManager {
     public void addPetriNet() {
         PetriNet newPetriNet = new PetriNet(loadOneNet());
         //we add the token to the place
-        while (IO.yesOrNo("Do you want to add token to place ? ")){
+        while (IO.yesOrNo(IO.DO_YOU_WANT_TO_ADD_TOKEN_TO_PLACE)){
             addTokentoPetriNet(newPetriNet);
         }
 
@@ -123,10 +104,10 @@ public class NetManager {
                 IO.printString(placeTemp);
 
                 //qui chiedo quale transazione-posto vuole modificare
-                String placeToChange = placeTemp.get(IO.readInteger("What place you want change?", 0, placeTemp.size())-1);
-                int weight = IO.readIntegerWithMin("Insert the weight that you want to give to the place", 0);
+                String placeToChange = placeTemp.get(IO.readInteger(IO.WHAT_PLACE_YOU_WANT_CHANGE, 0, placeTemp.size())-1);
+                int weight = IO.readIntegerWithMin(IO.INSERT_THE_WEIGHT_THAT_YOU_WANT_TO_GIVE_TO_THE_PLACE, 0);
                 newPetriNet.addWeight(transTemp.get(choose).getName(), placeToChange, weight);
-            }while(IO.yesOrNo("Do you want to add other weights to this transition?"));
+            }while(IO.yesOrNo(IO.DO_YOU_WANT_TO_ADD_OTHER_WEIGHTS_TO_THIS_TRANSITION));
 
 
 
@@ -140,15 +121,15 @@ public class NetManager {
 
 
         IO.printPlace(newPetriNet.getSetOfPlace());
-        int choise = IO.readInteger("where do you want to add the tokens?", 0, tempPlace.size());
-        int token = IO.readIntegerWithMin("Insert the number of tokens: ", 0);
+        int choise = IO.readInteger(IO.WHERE_DO_YOU_WANT_TO_ADD_THE_TOKENS, 0, tempPlace.size());
+        int token = IO.readIntegerWithMin(IO.INSERT_THE_NUMBER_OF_TOKENS, 0);
 
         String  placeId = tempPlace.get(choise).getName();
 
         if(newPetriNet.addToken(placeId, token)){
-            IO.print("The weight has been added");
+            IO.print(IO.THE_WEIGHT_HAS_BEEN_ADDED);
         }else{
-            IO.print("The place doesn't exist");
+            IO.print(IO.THE_PLACE_DOESN_T_EXIST);
         }
 
 
@@ -195,11 +176,11 @@ public class NetManager {
 
     //metodo che stampa tutte le net in netlist e ne restituisce una scelta dall'utente
     public Net loadOneNet() {
-
-        for (int i = 0; i < netList.size(); i++) {
+        IO.printNet(netList);
+        /*for (int i = 0; i < netList.size(); i++) {
             System.out.println(i + ") " + netList.get(i).getName());
-        }
-        int choise = IO.readInteger("choose the network number ", 0, netList.size());
+        }*/
+        int choise = IO.readInteger(IO.CHOOSE_THE_NETWORK_NUMBER_, 0, netList.size());
         return netList.get(choise);
     }
 

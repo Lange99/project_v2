@@ -1,7 +1,4 @@
-package Project_v2;
-
-import Utility.*;
-
+package main.java.Project_v2;
 
 import java.util.*;
 

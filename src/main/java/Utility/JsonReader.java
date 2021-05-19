@@ -1,10 +1,9 @@
-package Utility;
+package main.java.Utility;
 
-import Project_v2.Net;
-import Project_v2.Pair;
-import Project_v2.PetriNet;
+import main.java.Project_v2.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -14,7 +13,7 @@ import java.util.Scanner;
  * class to read Json file
  */
 public class JsonReader {
-    //private static String path = new File("src/main/java/Json/Net.json").getAbsolutePath();
+    private static String path = new File("src/main/java/JsonFile").getAbsolutePath();
 
     /**
      * read file method

@@ -1,18 +1,22 @@
-package Utility;
+package main.java.Utility;
 
-import Project_v2.*;
-import org.json.JSONArray;
-import org.json.JSONObject;
-//import org.json.JSONArray;
-//import org.json.JSONObject;
+
+
+import main.java.Project_v2.*;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Scanner;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 /**
  * class to save the net in json file
  */

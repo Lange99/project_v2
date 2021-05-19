@@ -1,6 +1,6 @@
-package Project_v2;
+package main.java.Project_v2;
 
-import Utility.IO;
+import main.java.Utility.IO;
 
 
 import java.util.*;
