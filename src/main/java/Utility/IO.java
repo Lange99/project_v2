@@ -1,5 +1,7 @@
 package Utility;
 
+import Project_v2.Net;
+import Project_v2.Pair;
 import Project_v2.Place;
 import Project_v2.Transition;
 
@@ -203,4 +205,168 @@ public class IO {
             IO.print((i+1)+") "+list.get(i));
         }
     }
+
+    /**
+     * method to view the net
+     *
+     * @param net
+     */
+    public static void showPetriNet(Net net) {
+        //get name and if of the net
+        String nameNet = net.getName();
+        String idNet = net.getID();
+        //initialize the places and transitions arraylist
+        ArrayList<String> places = new ArrayList<String>();
+        ArrayList<String> transitions = new ArrayList<String>();
+        ArrayList<String> tokens = new ArrayList<>();
+        ArrayList<String> weights = new ArrayList<>();
+        ArrayList<Integer> directions = new ArrayList<>();
+
+        //for every pair in the net get the name of place and name of transition
+        for (Pair p : net.getNet()) {
+            String place = p.getPlace().getName();
+            String trans = p.getTrans().getName();
+            String tokenPlace = Integer.toString(p.getPlace().getNumberOfToken());
+            int direction = p.getTrans().getInputOutput(p.getPlace().getName());
+            String weightPair = Integer.toString(p.getWeight());
+            //add place to arraylist of places
+            places.add(place);
+            //add transition to arraylist of transitions
+            transitions.add(trans);
+            directions.add(direction);
+            tokens.add(tokenPlace);
+            weights.add(weightPair);
+        }
+        ArrayList<Integer> order = new ArrayList<>();
+        //initialize hashmap that contains the index of place that have the same transition in common
+        HashMap<Integer, Integer> index = new HashMap<Integer, Integer>();
+        //for every transition in the arraylist check if there are other transition equal
+        for (int i = 0; i < transitions.size(); i++) {
+            for (int j = 0; j < transitions.size(); j++) {
+                //if index i and j are different, check
+                if (i != j) {
+                    //if the transition in i position is equal to the transition in j position, put the index i and j put the index i and j in the hashmap of index
+                    if (transitions.get(i).equals(transitions.get(j))) {
+                        int dir = directions.get(i);
+                        if (dir == 1) {
+                            if (!JsonManager.existAlready(index, i, j)) {
+                                index.put(i, j);
+                                order.add(0);
+                            }
+                        } else {
+                            if (!JsonManager.existAlready(index, i, j)) {
+                                index.put(i, j);
+                                order.add(1);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        //initialize new hashmap of index without the copies of the same reference
+        //HashMap<Integer, Integer> indexUpdate = checkDuplicate(index);
+        //initialize new Arraylist of couples
+        ArrayList<String> couples = new ArrayList<String>();
+        //for every element in indexUpdate initialize a String that contains the two place and the transition in common
+        int i = 0;
+        String couple = "";
+        for (Map.Entry<Integer, Integer> entry : index.entrySet()) {
+            if (order.get(i) == 0) {
+                couple = places.get(entry.getKey()) + " <" + tokens.get(i) + "> ----------<" + weights.get(i) + ">----------▶ " + transitions.get(entry.getValue());
+            } else {
+                couple = places.get(entry.getKey()) + " <" + tokens.get(i) + "> ◀︎----------<" + weights.get(i) + ">---------- " + transitions.get(entry.getValue());
+            }
+            //add the string to the arraylist
+            couples.add(couple);
+            i++;
+        }
+
+        //print the name and id and print all the pairs with their transition
+        IO.print("\nName net: " + nameNet + "\t\tID net: " + idNet);
+        IO.print("List pairs:");
+        for (String s : couples) {
+            IO.print("\t" + s);
+        }
+        IO.print("");
+
+    }
+
+    /**
+     * method to view the net
+     *
+     * @param net
+     */
+    public static void showNet(Net net) {
+        //get name and if of the net
+        String nameNet = net.getName();
+        String idNet = net.getID();
+        //initialize the places and transitions arraylist
+        ArrayList<String> places = new ArrayList<String>();
+        ArrayList<String> transitions = new ArrayList<String>();
+        ArrayList<Integer> directions = new ArrayList<>();
+
+        //for every pair in the net get the name of place and name of transition
+        for (Pair p : net.getNet()) {
+            String place = p.getPlace().getName();
+            String trans = p.getTrans().getName();
+            int direction = p.getTrans().getInputOutput(p.getPlace().getName());
+            //add place to arraylist of places
+            places.add(place);
+            //add transition to arraylist of transitions
+            transitions.add(trans);
+            directions.add(direction);
+        }
+        ArrayList<Integer> order = new ArrayList<>();
+        //initialize hashmap that contains the index of place that have the same transition in common
+        HashMap<Integer, Integer> index = new HashMap<Integer, Integer>();
+        //for every transition in the arraylist check if there are other transition equal
+        for (int i = 0; i < transitions.size(); i++) {
+            for (int j = 0; j < transitions.size(); j++) {
+                //if index i and j are different, check
+                if (i != j) {
+                    //if the transition in i position is equal to the transition in j position, put the index i and j put the index i and j in the hashmap of index
+                    if (transitions.get(i).equals(transitions.get(j))) {
+                        int dir = directions.get(i);
+                        if (dir == 1) {
+                            if (!JsonManager.existAlready(index, i, j)) {
+                                index.put(i, j);
+                                order.add(0);
+                            }
+                        } else {
+                            if (!JsonManager.existAlready(index, i, j)) {
+                                index.put(i, j);
+                                order.add(1);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        //initialize new hashmap of index without the copies of the same reference
+        //HashMap<Integer, Integer> indexUpdate = checkDuplicate(index);
+        //initialize new Arraylist of couples
+        ArrayList<String> couples = new ArrayList<String>();
+        //for every element in indexUpdate initialize a String that contains the two place and the transition in common
+        int i = 0;
+        String couple = "";
+        for (Map.Entry<Integer, Integer> entry : index.entrySet()) {
+            if (order.get(i) == 0) {
+                couple = places.get(entry.getKey()) + "----->" + transitions.get(entry.getValue());
+            } else {
+                couple = places.get(entry.getKey()) + "<-----" + transitions.get(entry.getValue());
+            }
+            //add the string to the arraylist
+            couples.add(couple);
+            i++;
+        }
+
+        //print the name and id and print all the pairs with their transition
+        IO.print("\nName net: " + nameNet + "\t\tID net: " + idNet);
+        IO.print("List pairs:");
+        for (String s : couples) {
+            IO.print("\t" + s);
+        }
+        System.out.println();
+    }
+
 }
