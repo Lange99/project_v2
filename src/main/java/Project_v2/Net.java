@@ -341,4 +341,32 @@ public class Net {
         }
         return true;
     }
+
+    public Transition researchTrans(String nameTrans){
+        for(Transition t: getSetOfTrans()){
+            if(t.getName().equals(nameTrans)){
+                return  t;
+            }
+        }
+    return null;
+    }
+
+
+    public Place researchPlace(String namePlace){
+        for(Place p: getSetOfPlace()){
+            if(p.getName().equals(namePlace)){
+                return  p;
+            }
+        }
+        return null;
+    }
+
+    public Pair researchPair(Transition t, Place p){
+        for(Pair pair: getNet()){
+            if(pair.getPlace().equals(p) && pair.getTrans().equals(t)){
+                return  pair;
+            }
+        }
+        return null;
+    }
 }

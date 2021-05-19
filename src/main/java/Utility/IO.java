@@ -16,6 +16,8 @@ public class IO {
     public static final String TYPE_OF_NET = "Do you want load:\n1) simple net\n2) Petri Net\n" ;
     public static final String FILE_IS_LOADED = "File is loaded";
     public static final String VISUALIZE_THE_LIST = "Visualize the list";
+    public static final String ADD_WEIGHT = "Do you want to add weight to the transition? If you say no we insert the default value";
+    public static final String TRANSITION_CHOOSE = "These are the transition in the Net, do you have to choose which one modify: (insert the number)" ;
     private static final String path = new File("src/main/java/JsonFile").getAbsolutePath();
     private static final String petriPath = new File("src/main/java/JsonPetri").getAbsolutePath();
     public static final String ANOTHER_NET = "You want add another Net?";
@@ -194,6 +196,7 @@ public class IO {
             i++;
         }
     }
+
 
     public static void printString(List<String> list) {
         for(int i=0; i<list.size();i++){

@@ -110,7 +110,7 @@ public class JsonWriter {
         String name;
         do {
             //get the name of file insert by user
-            name = Reader.ReadString("Insert the name of the file:\n");
+            name = IO.ReadString("Insert the name of the file:\n");
             //add the extension .json to the name file
             name=name+".json";
             //set ctrl false to exit by the loop
@@ -198,7 +198,7 @@ public class JsonWriter {
         String name;
         do {
             //get the name of file insert by user
-            name = Reader.ReadString("Insert the name of the file:\n");
+            name = IO.ReadString("Insert the name of the file:\n");
             //add the extension .json to the name file
             name=name+".json";
             //set ctrl false to exit by the loop
