@@ -1,8 +1,8 @@
-package main.java.Utility;
+package Utility;
 
 
 
-import main.java.Project_v2.*;
+import Project_v2.*;
 
 import java.io.File;
 

@@ -1,6 +1,7 @@
-package main.java.Utility;
+package Utility;
 
-import main.java.Project_v2.*;
+import Project_v2.Net;
+import Project_v2.Pair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

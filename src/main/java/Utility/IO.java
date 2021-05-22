@@ -1,11 +1,7 @@
-package main.java.Utility;
+package Utility;
 
 
-import main.java.Project_v2.Net;
-import main.java.Project_v2.Pair;
-import main.java.Project_v2.Place;
-import main.java.Project_v2.Transition;
-import main.java.Utility.JsonManager;
+import Project_v2.*;
 
 import java.io.File;
 import java.util.*;

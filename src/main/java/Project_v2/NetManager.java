@@ -1,6 +1,6 @@
-package main.java.Project_v2;
+package Project_v2;
 
-import main.java.Utility.*;
+import Utility.*;
 
 import java.io.IOException;
 import java.util.ArrayList;

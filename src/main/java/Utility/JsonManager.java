@@ -1,9 +1,6 @@
-package main.java.Utility;
+package Utility;
 
-
-
-
-import main.java.Project_v2.Net;
+import Project_v2.Net;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -24,19 +21,9 @@ public class JsonManager {
      * @throws FileNotFoundException
      */
     public static Net loadNet(String path) throws FileNotFoundException {
-        //initialize the File object directory
-        File directory = new File(path);
-        //initialize the string that contains the list of name file
-        String[] pathname = directory.list();
-        int i = 0;
+        String[] pathname = getPathname(path);
+        int i = checkNumFile(pathname);
         Net newNet;
-        //for every name file in the directory print the name
-        if (pathname!=null) {
-            for (String s: pathname) {
-                i++;
-                System.out.println(i+") "+s);
-            }
-        }
         //if there are not files in the directory print this
         if (i==0) {
             System.out.println(THERE_AREN_T_ANY_FILES_TO_LOAD);
@@ -47,8 +34,13 @@ public class JsonManager {
             int number = IO.readInteger(INSERT_THE_ID_OF_THE_FILE_YOU_WANT_TO_LOAD, 1, i);
             //get the name of file by the pathname string array and decrement 1 because the print file start with 1
             String pathFile = path+"/"+pathname[number-1];
-            //initialize new net and read json file
-            newNet = JsonReader.readJson(pathFile);
+            // read json file
+            if (path.equals(IO.JSON_FILE)) {
+                newNet = JsonReader.readJson(pathFile);
+            }
+            else {
+                newNet = JsonReader.readPetriJson(pathFile);
+            }
             System.out.println(FILE_IS_LOADED);
             System.out.println(SHOW_THE_NET);
             return newNet;
@@ -56,6 +48,25 @@ public class JsonManager {
         return null;
     }
 
+    private static int checkNumFile(String[] pathname) {
+        int i = 0;
+        //for every name file in the directory print the name
+        if (pathname != null) {
+            for (String s: pathname) {
+                i++;
+                System.out.println(i+") "+s);
+            }
+        }
+        return i;
+    }
+
+    private static String[] getPathname(String path) {
+        //initialize the File object directory
+        File directory = new File(path);
+        //initialize the string that contains the list of name file
+        String[] pathname = directory.list();
+        return pathname;
+    }
 
     /**
      * method to check if the index to check has already checked or not
