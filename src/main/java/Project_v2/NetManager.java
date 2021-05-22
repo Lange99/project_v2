@@ -180,8 +180,8 @@ public class NetManager {
         /*for (int i = 0; i < netList.size(); i++) {
             System.out.println(i + ") " + netList.get(i).getName());
         }*/
-        int choise = IO.readInteger(IO.CHOOSE_THE_NETWORK_NUMBER_, 0, netList.size());
-        return netList.get(choise);
+        int choise = IO.readInteger(IO.CHOOSE_THE_NETWORK_NUMBER_, 1, netList.size());
+        return netList.get(choise-1);
     }
 
 }

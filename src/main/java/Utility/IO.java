@@ -377,9 +377,11 @@ public class IO {
     }
 
     public static void printNet(Iterable<Net> netList) {
-    for (Net n: netList){
-        print(n.getName());
-    }
+        int i=1;
+        for (Net n: netList){
+            print(i+")"+n.getName());
+            i++;
+        }
 
     }
 }
