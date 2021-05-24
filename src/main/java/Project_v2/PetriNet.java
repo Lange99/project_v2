@@ -1,5 +1,8 @@
 package Project_v2;
 
+import Utility.*;
+
+
 import java.util.*;
 
 public class PetriNet extends Net {
