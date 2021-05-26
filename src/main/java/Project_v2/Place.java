@@ -37,4 +37,21 @@ public class Place {
     public int hashCode() {
         return Objects.hash(name);
     }
+
+    /**
+     * Override Equals
+     *
+     * @param obj
+     * @return true if two Place have same name
+     * @return false if two Place have different name
+     */
+    @Override
+    public boolean equals(Object obj) {
+        assert obj instanceof Place;
+        Place p = (Place) obj;
+        if (name.equals(p.getName())) {
+            return true;
+        }
+        return false;
+    }
 }

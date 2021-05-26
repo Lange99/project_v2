@@ -69,6 +69,24 @@ public class Transition {
      * this method return the hashcode of the transition
      */
     public int hashCode() {
+        assert name!=null;
         return Objects.hash(name);
+    }
+
+    /**
+     * Override Equals
+     *
+     * @param obj
+     * @return true if two Transition have same name
+     * @return false if two Transition have different name
+     */
+    @Override
+    public boolean equals(Object obj) {
+        assert obj instanceof Transition;
+        Transition t = (Transition) obj;
+        if (name.equals(t.getName())) {
+            return true;
+        }
+        return false;
     }
 }

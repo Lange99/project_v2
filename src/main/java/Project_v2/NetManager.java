@@ -143,7 +143,7 @@ public class NetManager {
         int choise = IO.readInteger("where do you want to add the tokens?", 0, tempPlace.size());
         int token = IO.readIntegerWithMin("Insert the number of tokens: ", 0);
 
-        String  placeId = tempPlace.get(choise).getName();
+        String  placeId = tempPlace.get(choise-1).getName();
 
         if(newPetriNet.addToken(placeId, token)){
             IO.print("The weight has been added");
