@@ -9,7 +9,10 @@ import java.io.File;
 import java.util.*;
 
 public class IO {
+    public static final String DO_YOU_WANT_TO_SAVE_THAT_PETRI_S_NET = "Do you want to save that Petri's Net?";
+    public static final String DO_YOU_WANT_TO_ADD_TOKEN_TO_PLACE = "Do you want to add token to place ? ";
     public static final String THERE_AREN_T_ANY_FILES_TO_LOAD = "There aren't any files to load";
+    public static final String WHICH_TYPE_OF_CONNECTION_THERE_IS_BETWEEN_THE_PLACE = "Which type of connection there is between the place";
     public static final String INSERT_PLACE_S_ID = "Insert place's Name ";
     public static final String INSERT_TRANSITION_S_ID = "Insert transition's Name ";
     public static final String YOU_CAN_T_ADD_THIS_PAIR_BECAUSE_ALREADY_EXISTS = "You can't Add this pair because it already exists";
@@ -52,7 +55,7 @@ public class IO {
         System.err.println(s);
     }
 
-    public static String readNotEmpityString(String message) {
+    public static String readNotEmptyString(String message) {
         boolean finish = false;
         String read = null;
         do {

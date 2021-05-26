@@ -2,12 +2,15 @@ package Utility;
 
 import Project_v2.Net;
 import Project_v2.Pair;
+import Project_v2.Transition;
+import Project_v2.Place;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -17,6 +20,7 @@ public class JsonReader {
 
     /**
      * read file method
+     *
      * @param pathname
      * @return Net
      * @throws FileNotFoundException
@@ -50,18 +54,19 @@ public class JsonReader {
             String place = obj.getString("@place");
             String trans = obj.getString("@transition");
             int direction = obj.getInt("@direction");
+
             //initialize new Pair object and add it to the net
-            Pair pair = new Pair(place, trans, direction);
-            net.addPairFromJson(pair);
+            net.addPair(new Transition(trans), new Place(place), direction);
+
         }
         // fill the sets with transitions and nodes
-        net.fillSet();
         //the net is built and return
         return net;
     }
 
     /**
      * this method allows to read a Petri's net contain in a file
+     *
      * @param pathname
      * @return Net
      * @throws FileNotFoundException

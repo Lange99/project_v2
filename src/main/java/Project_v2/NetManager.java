@@ -16,6 +16,7 @@ import java.util.Map;
 public class NetManager {
 
     private ArrayList<Net> netList = new ArrayList<Net>();
+    private ArrayList<PetriNet> petriNetList = new ArrayList<PetriNet>();
     /**
      * this method handles the interface with the user
      *
@@ -83,7 +84,7 @@ public class NetManager {
     public void addPetriNet() {
         PetriNet newPetriNet = new PetriNet(loadOneNet());
         //we add the token to the place
-        while (IO.yesOrNo("Do you want to add token to place ? ")){
+        while (IO.yesOrNo(IO.DO_YOU_WANT_TO_ADD_TOKEN_TO_PLACE)){
             addTokentoPetriNet(newPetriNet);
         }
 
@@ -92,8 +93,10 @@ public class NetManager {
         addWeightToPetriNet(newPetriNet);
 
 
-        JsonWriter.writeJsonPetri(newPetriNet);
-        netList.add(newPetriNet);
+        if(IO.yesOrNo(IO.DO_YOU_WANT_TO_SAVE_THAT_PETRI_S_NET)){
+            JsonWriter.writeJsonPetri(newPetriNet);
+        }
+        petriNetList.add(newPetriNet);
     }
 
     private void addWeightToPetriNet(PetriNet newPetriNet) {
@@ -150,14 +153,32 @@ public class NetManager {
     /**
      * this method allows to add a net
      */
-    public void addNet() {
+    public void addNet() throws FileNotFoundException {
+        String placeName;
+        String transName;
+        int inOrOut;
 
         do {
-            Net n = new Net(IO.readNotEmpityString(IO.NAME_OF_NET));
+            Net n = new Net(IO.readNotEmptyString(IO.NAME_OF_NET));
+            do {
+                // ask to user the place's ID and the transition's ID
+                placeName = IO.readNotEmptyString(IO.INSERT_PLACE_S_ID);
+                transName = IO.readNotEmptyString(IO.INSERT_TRANSITION_S_ID);
+                inOrOut = IO.readInteger(IO.WHICH_TYPE_OF_CONNECTION_THERE_IS_BETWEEN_THE_PLACE + placeName + "and the transition " + transName + "? \n 1)" + placeName + " is an INPUT of " + transName + "\n 2)" + placeName + " is an OUTPUT of " + transName + "\n", 1, 2);
+                //this If check if the new node is equal to another one which is already in the net
+
+                //I create a temporary transition and a temporary place because it makes easy to check them
+                Transition t = new Transition(transName);
+                Place p = new Place(placeName);
+                if(!n.addPair(t, p, inOrOut)){
+                    System.out.println(IO.YOU_CAN_T_ADD_THIS_PAIR_BECAUSE_ALREADY_EXISTS);
+                }
+            } while (IO.yesOrNo(IO.YOU_WANT_ADD_ANOTHER_PAIR));
             //if the new net is correct we show it to the user and ask if he wants to save it
-            if (checkNet(n) && n.checkTrans() && n.checkConnect()) {
+            if (checkNet(n) && n.checkTrans() && n.checkConnect() && checkEqualNet(n)) {
                 IO.showNet(n);
                 IO.print(IO.THE_NET_IS_CORRECT_WE_ARE_GOING_TO_SAVE_IT);
+
                 netList.add(n);
 
                 if (IO.yesOrNo(IO.SAVE_NET)) {
@@ -165,7 +186,8 @@ public class NetManager {
                 }
             } else {
                 //if the net is incorrect we inform the user
-                IO.print(IO.THE_NET_IS_INCORRECT_IT_CAN_T_BE_SAVED);
+                IO.printError(IO.THE_NET_IS_INCORRECT_IT_CAN_T_BE_SAVED);
+
             }
         } while (IO.yesOrNo(IO.ANOTHER_NET));
     }
@@ -190,10 +212,68 @@ public class NetManager {
     public Net loadOneNet() {
 
         for (int i = 0; i < netList.size(); i++) {
-            System.out.println(i + ") " + netList.get(i).getName());
+           IO.print(i + ") " + netList.get(i).getName());
+
         }
         int choise = IO.readInteger("choose the network number ", 0, netList.size());
         return netList.get(choise);
+    }
+
+    /**
+     * this method check if the net already exists and that can't be saved
+     *
+     * @param netToCheck the net that should be check
+     * @return true if that net already exists and false if it doesn't
+     * @throws FileNotFoundException PRECONDITION: NetToCheck!=null
+     */
+    private boolean checkEqualNet(Net netToCheck) throws FileNotFoundException {
+        assert netToCheck != null;
+        //initialize the File object directory
+        File directory = new File("src/main/Json");
+        //initialize the string that contains the list of name file
+        String[] pathname = directory.list();
+        int dim;
+        if (pathname != null)
+            dim = pathname.length;
+        else {
+            return true;
+        }
+
+        ArrayList<Pair> pairsNewNet = netToCheck.getNet();
+        int ctrl = 0;
+        //consider all files in directory
+        for (int i = 0; i < dim; i++) {
+            if (ctrl == pairsNewNet.size()) {
+                return false;
+            }
+            ctrl = 0;
+            //get pathname of the file
+            String path = IO.JSON_FILE+"/" + pathname[i];
+            //build a net by the file
+            Net net = JsonReader.readJson(path);
+            //get all pairs of the net
+            ArrayList<Pair> pairsOldNet = net.getNet();
+
+            //if the size is equal chek, else change file
+            if (pairsOldNet.size() == pairsNewNet.size()) {
+                int j = 0;
+                //for every pair in the new net, take every pair of the pre existing net and check
+                for (Pair newPair : pairsNewNet) {
+                    if (ctrl < j)
+                        break;
+                    for (Pair oldPair : pairsOldNet) {
+                        if (newPair.getPlaceName().equals(oldPair.getPlaceName())) {
+                            if (newPair.getPlaceName().equals(oldPair.getPlaceName())) {
+                                ctrl++;
+                                break;
+                            }
+                        }
+                    }
+                    j++;
+                }
+            }
+        }
+        return true;
     }
 
 }

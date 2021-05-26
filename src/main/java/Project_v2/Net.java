@@ -73,22 +73,13 @@ public class Net {
 
             //I check if the pair is equal than an other one which already exists
             if (checkPair(new Pair(p, t))) {
-                //with this if I check if the node is a in or an output
-                if (inOrOut == 1) {
-                    //if this is an in I add the place to the pre
-                    t.addPre(p.getName());
-                } else {
-                    //if this is an in I add the place to the post
-                    t.addPost(p.getName());
-                }
-                net.add(new Pair(p, t));
-                //this for looks for if the place already exist
-                setOfPlace.add(p);
 
                 if (setOfTrans.add(t)) {
                     if (inOrOut == 1) {
+                        //if this is an in I add the place to the pre
                         t.addPre(p.getName());
                     } else {
+                        //if this is an in I add the place to the post
                         t.addPost(p.getName());
                     }
                 } else {
@@ -102,6 +93,11 @@ public class Net {
                         }
                     }
                 }
+                net.add(new Pair(p, t));
+                //this for looks for if the place already exist
+                setOfPlace.add(p);
+
+
             } else {
                 //I say to the user that the pair already exists
                 return false;
@@ -290,8 +286,7 @@ public class Net {
         assert !map.isEmpty();
         assert !boolmap.isEmpty();
         assert !key.equals(null);
-
-        boolmap.replace(key, true);
+       boolmap.replace(key, true);
         for (String nextKey : map.get(key)) {
             if (!boolmap.get(nextKey)) {
                 recursion(map, boolmap, nextKey);

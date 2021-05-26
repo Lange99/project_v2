@@ -8,7 +8,7 @@ public class Transition {
     private ArrayList<String> idPre= new ArrayList<>();
     private ArrayList<String> idPost= new ArrayList<>();
 
-    Transition(String name){
+    public Transition(String name){
         this.name=name;
     }
 

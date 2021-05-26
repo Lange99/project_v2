@@ -24,6 +24,13 @@ public class Pair {
         this.trans.addPreOrPost(place_name, direction);
     }
 
+    public Pair(String place_name, Transition trans, int direction){
+        this.place = new Place(place_name);
+        this.trans = trans;
+        this.trans.addPreOrPost(place_name, direction);
+    }
+
+
     public Pair(String place_name, int token, String trans_name, int direction, int weight) {
         this.place = new Place(place_name, token);
         this.trans = new Transition(trans_name);

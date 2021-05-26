@@ -143,13 +143,11 @@ public class JsonWriter {
         ArrayList<Pair> pairsList = net.getNet();
 
         //initialize the string  id and name of the net
-        String idNet = net.getID();
         String nameNet = net.getName();
 
         //create json object to add to file
         JSONObject netJson = new JSONObject();
         //add propriety to json
-        netJson.put("@net", idNet);
         netJson.put("@name", nameNet);
 
         //initialize the JsonArray of the pairs of the net
