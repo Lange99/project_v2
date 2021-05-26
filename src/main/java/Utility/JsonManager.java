@@ -18,7 +18,9 @@ public class JsonManager {
 
     /**
      * method to load a net by json file
+     *
      * @throws FileNotFoundException
+     * @return newNet if there is a json, null if there isn't any file
      */
     public static Net loadNet(String path) throws FileNotFoundException {
         String[] pathname = getPathname(path);
@@ -48,19 +50,31 @@ public class JsonManager {
         return null;
     }
 
+    /**
+     * method used to get number of existing file
+     * @param pathname
+     * @return the number of file i
+     */
     private static int checkNumFile(String[] pathname) {
+        assert !pathname.equals(null);
         int i = 0;
         //for every name file in the directory print the name
         if (pathname != null) {
-            for (String s: pathname) {
+            for (String s : pathname) {
                 i++;
-                System.out.println(i+") "+s);
+                System.out.println(i + ") " + s);
             }
         }
         return i;
     }
 
+    /**
+     * method to get the pathname of the directory
+     * @param path
+     * @return pathname
+     */
     private static String[] getPathname(String path) {
+        assert !path.equals(null);
         //initialize the File object directory
         File directory = new File(path);
         //initialize the string that contains the list of name file
@@ -70,14 +84,16 @@ public class JsonManager {
 
     /**
      * method to check if the index to check has already checked or not
-     * @param index
-     * @param i
-     * @param j
-     * @return
+     *
+     * @param index is index hashmap of all pair
+     * @param i first index to check
+     * @param j second index to check
+     * @return true if exist already, false vice versa
      */
     public static boolean existAlready(HashMap<Integer, Integer> index, int i, int j) {
+        assert !index.isEmpty();
         boolean ctrl = false;
-        for (Map.Entry<Integer, Integer> entry: index.entrySet()) {
+        for (Map.Entry<Integer, Integer> entry : index.entrySet()) {
             if (entry.getKey() == i) {
                 if (entry.getValue() == j) {
                     ctrl = true;
