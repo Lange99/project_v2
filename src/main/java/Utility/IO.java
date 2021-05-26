@@ -214,7 +214,6 @@ public class IO {
     public static void showPetriNet(Net net) {
         //get name and if of the net
         String nameNet = net.getName();
-        String idNet = net.getID();
         //initialize the places and transitions arraylist
         ArrayList<String> places = new ArrayList<String>();
         ArrayList<String> transitions = new ArrayList<String>();
@@ -282,7 +281,7 @@ public class IO {
         }
 
         //print the name and id and print all the pairs with their transition
-        IO.print("\nName net: " + nameNet + "\t\tID net: " + idNet);
+        IO.print("\nName net: " + nameNet );
         IO.print("List pairs:");
         for (String s : couples) {
             IO.print("\t" + s);
@@ -299,7 +298,6 @@ public class IO {
     public static void showNet(Net net) {
         //get name and if of the net
         String nameNet = net.getName();
-        String idNet = net.getID();
         //initialize the places and transitions arraylist
         ArrayList<String> places = new ArrayList<String>();
         ArrayList<String> transitions = new ArrayList<String>();
@@ -361,7 +359,7 @@ public class IO {
         }
 
         //print the name and id and print all the pairs with their transition
-        IO.print("\nName net: " + nameNet + "\t\tID net: " + idNet);
+        IO.print("\nName net: " + nameNet );
         IO.print("List pairs:");
         for (String s : couples) {
             IO.print("\t" + s);

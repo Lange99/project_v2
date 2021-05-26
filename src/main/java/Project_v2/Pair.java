@@ -6,11 +6,14 @@ public class Pair {
     private int weight = 1;
 
     public  Pair(Place place, Transition trans){
+        assert !place.equals(null);
         this.place=place;
         this.trans=trans;
     }
 
     public Transition getTrans() {
+        assert !place.equals(null);
+        assert !trans.equals(null);
         return trans;
     }
 
@@ -46,6 +49,7 @@ public class Pair {
      */
 
     public boolean compare(Pair toCompare) {
+        assert !toCompare.compare(null);
         //check if the place's ID is equal to the toCompare's ID, and then check if the trans'S ID is equal to the toCOmpare'S ID
         if( (place.getName().compareTo(toCompare.getPlaceName()) == 0) &&
                 (trans.getName().compareTo(toCompare.getTransName()) == 0)){
@@ -55,11 +59,11 @@ public class Pair {
     }
 
     public String getTransName(){
-
+        assert !trans.getName().equals(null);
         return  trans.getName();
     }
     public String getPlaceName(){
-
+        assert !place.getName().equals(null);
         return  place.getName();
     }
 }

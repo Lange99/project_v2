@@ -7,10 +7,17 @@ public class Place {
     private int numberOfToken = 0;
 
     public Place(String _name){
+        assert _name!=null;
         this.name=_name;
     }
 
+    /**
+     * this method allows to create the Petri's Net
+     * @param name_ the name of the place
+     * @param token the number of the token
+     */
     public Place(String name_, int token) {
+        assert name.equals(null);
         this.name = name_;
         this.numberOfToken = token;
     }
@@ -24,10 +31,12 @@ public class Place {
     }
 
     public void setName(String name) {
+        assert !name.equals(null);
         this.name = name;
     }
 
     public void setToken(int n){
+        assert n>0;
         this.numberOfToken=n;
     }
     @Override
