@@ -20,36 +20,85 @@ public class Transition {
             idPost.add(placeName);
     }
 
+    /**
+     * this method gets the name of the transition
+     *
+     * @return the name of the transition
+     */
     public String getName() {
+        assert name != null;
         return name;
     }
 
+    /**
+     * this method sets a new name
+     *
+     * @param name the new name
+     */
     public void setName(String name) {
+        assert name != null;
         this.name = name;
     }
 
+    /**
+     * this method return the arraylist of the places which are in input of the transition
+     *
+     * @return all the Id of the pre
+     */
     public ArrayList<String> getIdPre() {
+        assert idPre != null;
         return idPre;
     }
 
+    /**
+     * this method return the arraylist of the places which are in output of the transition
+     *
+     * @return all the Id of the post
+     */
     public ArrayList<String> getIdPost() {
+        assert idPost != null;
         return idPost;
     }
 
 
-    public void addPre(String a){
-        idPre.add(a);
+    /**
+     * this method allows to add the a pre to the arraylist
+     *
+     * @param placeName the place adds to the arraylist
+     */
+    public void addPre(String placeName) {
+        assert placeName != null;
+        idPre.add(placeName);
     }
 
-    public void addPost(String a){
-        idPost.add(a);
+    /**
+     * this method allows to add the a post to the arraylist
+     *
+     * @param placeName the place adds to the arraylist
+     *                  PRECONDITION:assert  a!=null
+     */
+    public void addPost(String placeName) {
+        assert placeName != null;
+        idPost.add(placeName);
     }
 
-    public int sizePre(){
+    /**
+     * this method allows to know the size of pre
+     *
+     * @return the size of the arraylist of pre
+     */
+    public int sizePre() {
+        assert idPre != null;
         return idPre.size();
     }
 
-    public int sizePost(){
+    /**
+     * this method allows to know the size of post
+     *
+     * @return the size of post
+     */
+    public int sizePost() {
+        assert idPost != null;
         return idPost.size();
     }
 

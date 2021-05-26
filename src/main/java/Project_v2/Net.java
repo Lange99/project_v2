@@ -19,13 +19,7 @@ public class Net {
     private String name;
     private static int i;
 
-    public HashSet<Place> getSetOfPlace() {
-        return setOfPlace;
-    }
 
-    public HashSet<Transition> getSetOfTrans() {
-        return setOfTrans;
-    }
 
     public ArrayList<Pair> getNet() {
         return net;
@@ -39,13 +33,6 @@ public class Net {
         return name;
     }
 
-    public Net(Net _net) {
-        net.addAll(_net.getNet());
-        this.setOfPlace.addAll(_net.setOfPlace);
-        this.setOfTrans.addAll(_net.setOfTrans);
-        this.name = _net.getName();
-        this.ID = _net.getID();
-    }
 
     /**
      * constructor for the net
@@ -154,6 +141,7 @@ public class Net {
 
 
     public void addPairFromJson(Pair pair) {
+        assert pair!=null;
         net.add(pair);
     }
 
@@ -211,102 +199,76 @@ public class Net {
     }
 
 
-    /**
-     * this method allows to fill the sets of places and transitions starting from an already existing net
-     */
-    public void fillSet() {
-        int i;
-        boolean check = false;
-        for (i = 0; i < net.size(); i++) {
-            for (Transition t : setOfTrans) {
-                if (net.get(i).getTransName().compareTo(t.getName()) == 0) {
-                    check = true;
-                }
-            }
-            if(!check) setOfTrans.add(net.get(i).getTrans());
-            check=false;
-            for (Place p : setOfPlace) {
-                if (net.get(i).getPlaceName().compareTo(p.getName()) == 0) {
-                   check=true;
-                }
-            }
-            if(!check)setOfPlace.add(net.get(i).getPlace());
-            check=false;
-        }
-    }
 
 
     /**
-     * Deep search algorithm to check if the graph is connected
-     * @return true if connected otherwise it returns false
+     * this algorithm checks if the graph is connect
+     *
+     * @return true if the net is connect
      */
     public boolean checkConnect() {
 
-        String firstPlace = null; //
-        /*
-         * First of all I have to create maps that allow me to move on the graph with a recursive method
-         * I need a map keyed to the name of the places and a boolean as an element, as I will have to indicate which nodes I have already visited.
-         * Also I need another map that allows me to associate its neighbors to each node
-         */
+        String firstPlace = null;
+        //HashMap di bool
         HashMap<String, Boolean> check = new HashMap<>();
+
+        //this map to point out the graph's direction
+        //Map per indicare le direzioni del grafo
         HashMap<String, ArrayList<String>> map = new HashMap<>();
 
 
-        ArrayList<String> temp = new ArrayList<>(); //Temporary arraylist of strings that I use to create maps
-
-        //I fill the maps, both those of bool and those with links
-        for (Place place : setOfPlace) { //cycle on all places
+        ArrayList<String> temp = new ArrayList<>();
+        //this for fills both the boolean and the transitions maps,
+        for (Place place : setOfPlace) {//this for checks all the place
             firstPlace = place.getName();
             check.put(place.getName(), false);
-            for (Transition trans : setOfTrans) { // at this point I cycle over all the transitions to see if that place is part of its pre / post
-                //trans Pre
-                for (String name : trans.getIdPre()) {
-                    if (name.compareTo(place.getName()) == 0) { // if that post is part of the predecessors then I loop all its posts and add them to a temporary array
-                        for (String namePost : trans.getIdPost()) {
-                            temp.add(namePost);
-                        }
-                    }
-                }
-            }
-            // I insert the place associated with its pre / post in the map
-            map.put(place.getName(), new ArrayList<>(temp));
-            temp.clear();
-        }
-
-        // loop again in reverse to add the nodes I haven't visited in one way and update the data already there
-        for (Place place : setOfPlace) {
-            // if the key is not already present in the map I proceed as before without problems
-            if (map.containsKey(place.getName()) == false) {
+            //this for checks all the transition to see if the place is in its pre or post
+            if (!map.containsKey(place.getName())) {
                 for (Transition trans : setOfTrans) {
-                    for (String name : trans.getIdPost()) { // loop over all transitions to see if that post is part of his posts
-                        if (name.compareTo(place.getName()) == 0) {
-                            for (String namePre : trans.getIdPre()) {
-                                temp.add(namePre);
-                            }
-                        }
-                    }
+                    addTempArray(temp, trans.getIdPre(), trans.getIdPost(), place.getName());
+                    /** Se trovo il mio posto di riferimento all'interno dell'array di predecessori di una transizione, ciclo i successori e li aggiungo
+                     * al mio array temporaneo
+                     *
+                     * questo mi serve per riempire la mappa dei collegamenti;
+                     * Infatti poi userò come chiave il posto di riferimento, e come valore i suoi successori.
+                     */
+                }
+                //we insert the place that we have found and have linked to the pre/post in the map
+                map.put(place.getName(), new ArrayList<>(temp));
+                //map.put(place.getName(), tempPost);
+                temp.clear();
+                //tempPost.clear();
+            } else {
+                //If the key already exist  we add the new place to its array
+                for (Transition trans : setOfTrans) {
+                    addTempArray(temp, trans.getIdPre(), trans.getIdPost(), place.getName());
+                }
+                map.get(place.getName()).addAll(temp);
+                temp.clear();
+            }
+        }
+        //this for checks the place in the opposite direction because we want to add the place that we haven't seen yet and to update the information
+        for (Place place : setOfPlace) {
+            //if the key isn't in the map we go on without problems
+            if (!map.containsKey(place.getName())) {
+                for (Transition trans : setOfTrans) {
+                    addTempArray(temp, trans.getIdPost(), trans.getIdPre(), place.getName());
                 }
                 map.put(place.getName(), new ArrayList<>(temp));
                 temp.clear();
-            } else { // otherwise the key already exists and I have to add the nodes to the already existing array
+            } else {
+                //If the key already exist  we add the new place to its array
                 for (Transition trans : setOfTrans) {
-                    for (String name : trans.getIdPost()) { // loop over all transitions to see if that post is part of his posts
-                        if (name.compareTo(place.getName()) == 0) { // check if it is present as a pre in some transition
-                            for (String namePre : trans.getIdPre()) { // if it is present then loop on the pre to insert it into the map
-                                map.get(place.getName()).add(namePre);
-                            }
-                        }
-                    }
+                    addTempArray(temp, trans.getIdPost(), trans.getIdPre(), place.getName());
                 }
+                map.get(place.getName()).addAll(temp);
+                temp.clear();
             }
 
-
         }
-
-        // start recursion
+        //we start the recursion
         recursion(map, check, firstPlace);
-
-        // Check on the results of the recursion, if a node in the map is false it means that it has not been visited; therefore it is not connected
+        //we check the result of the recursion, if there is a false in the map this means that the place hasn't been check, so that isn't linked
         for (Place id : setOfPlace) {
             if (check.get(id.getName()) == false) {
                 return false;
@@ -314,6 +276,25 @@ public class Net {
         }
         return true;
     }
+
+    /**
+     * Method that allows me to fill a temporary array by cycling the firstArray and comparing it to PlaceName
+     * In case an element in firstArray is equal to PlaceName then I will have to clone secondArray in Temp
+     *
+     * @param temp               is the resulting array
+     * @param firstArrayOfPlace  is the arraylist that I compare with PlaceName
+     * @param secondArrayOfPlace
+     * @param placeName
+     */
+    public void addTempArray(ArrayList<String> temp, ArrayList<String> firstArrayOfPlace, ArrayList<String> secondArrayOfPlace, String placeName) {
+        for (String name : firstArrayOfPlace) { //this for checks if that place is in the post of the transition
+            if (name.equals(placeName)) {
+                temp.addAll(secondArrayOfPlace);
+                break;
+            }
+        }
+    }
+
 
     /**
      * Recursive method that allows, starting from a random node, to visit all the nodes of the graph if it is connected.
@@ -369,4 +350,45 @@ public class Net {
         }
         return null;
     }
+
+
+    /**
+     * this method allows to fill the sets of places and transitions starting from an already existing net
+     */
+    public void fillSet() {
+        int i;
+        boolean check = false;
+        for (i = 0; i < net.size(); i++) {
+            for (Transition t : setOfTrans) {
+                if (net.get(i).getTransName().compareTo(t.getName()) == 0) {
+                    check = true;
+                }
+            }
+            if(!check) setOfTrans.add(net.get(i).getTrans());
+            check=false;
+            for (Place p : setOfPlace) {
+                if (net.get(i).getPlaceName().compareTo(p.getName()) == 0) {
+                    check=true;
+                }
+            }
+            if(!check)setOfPlace.add(net.get(i).getPlace());
+            check=false;
+        }
+    }
+    public HashSet<Place> getSetOfPlace() {
+        return setOfPlace;
+    }
+
+    public HashSet<Transition> getSetOfTrans() {
+        return setOfTrans;
+    }
+
+    public Net(Net _net) {
+        net.addAll(_net.getNet());
+        this.setOfPlace.addAll(_net.setOfPlace);
+        this.setOfTrans.addAll(_net.setOfTrans);
+        this.name = _net.getName();
+        this.ID = _net.getID();
+    }
+
 }

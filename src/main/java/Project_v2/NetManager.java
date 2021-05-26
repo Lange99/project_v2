@@ -14,23 +14,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class NetManager {
-    public static final String ANOTHER_NET = "You want add another Net?";
-    public static final String NAME_OF_NET = "Add the name of Net:";
-    public static final String MENU = "What do you want do?\n0)EXIT\n1)Add new Net\n2)Load net\n3)Create a new Petri's Net";
-    public static final String WANT_TO_DO_ANOTHER_OPERATION = "you want to do another operation ";
-    public static final String SAVE_NET = "Do you want to save the net that you have already made? ";
-    public static final String DIGIT_YOUR_CHOISE = "Digit your choise ";
-    public static final String DIGIT_VALID_CHOISE = "Digit valid choise!";
-    public static final String THE_NET_IS_INCORRECT_IT_CAN_T_BE_SAVED = "The net is incorrect, it can't be saved";
-    public static final String THE_NET_IS_CORRECT_WE_ARE_GOING_TO_SAVE_IT = "The net is correct, we are going to save it";
-    public static final String NO_NORMAL_NET = "There aren't any nets! You have to insert or load a net before adding a Petri Net";
-    public static final String JSON_FILE = "src/main/java/JsonFile";
-    public static final String TYPE_OF_NET = "Do you want load:\n1) simple net\n2) Petri Net\n";
-    public static final String THERE_AREN_T_ANY_FILES_TO_LOAD = "There aren't any files to load";
-
 
     private ArrayList<Net> netList = new ArrayList<Net>();
-
+    /**
+     * this method handles the interface with the user
+     *
+     * @throws FileNotFoundException
+     */
     public void menageOption() throws IOException {
         boolean check = true;
         int choise = 0;
@@ -41,11 +31,14 @@ public class NetManager {
                 IO.print(IO.DIGIT_VALID_CHOISE);
                 choise = IO.readNumber(IO.DIGIT_YOUR_CHOISE);
             }
+            //this switch handles the different situation and it recalls the method for satisfy the user
 
             switch (choise) {
+                //the program stops running
                 case 0:
                     check = false;
                     break;
+                //this method allows to the user to create a new net
                 case 1:
 
                     addNet();

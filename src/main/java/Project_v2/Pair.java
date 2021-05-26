@@ -10,15 +10,6 @@ public class Pair {
         this.trans=trans;
     }
 
-    public Pair(String placeName, Transition trans){
-        this.place=new Place(placeName);
-        this.trans=trans;
-    }
-
-    public Pair(Place place, String transName){
-        this.place=place;
-        this.trans=new Transition(transName);
-    }
     public Transition getTrans() {
         return trans;
     }
