@@ -37,7 +37,7 @@ public class NetManager {
                 //the program stops running
                 case 0:
                     check = false;
-                    break;
+                    IO.print(IO.GOOD_BYE);
                 //this method allows to the user to create a new net
                 case 1:
 
@@ -153,7 +153,7 @@ public class NetManager {
     public void addNet() {
 
         do {
-            Net n = new Net(IO.readNotEmpityString(IO.NAME_OF_NET));
+            Net n = new Net(IO.readNotEmptyString(IO.NAME_OF_NET));
             //if the new net is correct we show it to the user and ask if he wants to save it
             if (checkNet(n) && n.checkTrans() && n.checkConnect()) {
                 IO.showNet(n);

@@ -9,7 +9,6 @@ public class Transition {
     private ArrayList<String> idPost= new ArrayList<>();
 
     Transition(String name){
-
         this.name=name;
     }
 

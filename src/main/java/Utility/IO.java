@@ -9,6 +9,7 @@ import java.io.File;
 import java.util.*;
 
 public class IO {
+    public static final String GOOD_BYE = "Good Bye";
     public static final String THERE_AREN_T_ANY_FILES_TO_LOAD = "There aren't any files to load";
     public static final String INSERT_PLACE_S_ID = "Insert place's Name ";
     public static final String INSERT_TRANSITION_S_ID = "Insert transition's Name ";
@@ -42,17 +43,34 @@ public class IO {
     private final static String MESSAGES_ALLOWED = "Warning, the value allowed are: ";
     private final static char YES_ANSWER = 'S';
     private final static char NO_ANSWER = 'N';
-
+    // scanner to read the user input
     private static Scanner reader = scannerBuild();
 
+    /**
+     * method to print shell message
+     * @param s is a string to print
+     */
     public static void print(String s){
+        assert !s.equals(null);
         System.out.println(s);
     }
+
+    /**
+     * method to print shell error
+     * @param s error to print
+     */
     public static void printError(String s){
+        assert !s.equals(null);
         System.err.println(s);
     }
 
-    public static String readNotEmpityString(String message) {
+    /**
+     * method to read a user input string
+     * @param message is a string to print
+     * @return is the string that the user wrote
+     */
+    public static String readNotEmptyString(String message) {
+        assert !message.equals(null);
         boolean finish = false;
         String read = null;
         do {
@@ -67,7 +85,13 @@ public class IO {
         return read;
     }
 
+    /**
+     * method to read if the user answer is yes or no
+     * @param message is a string to print
+     * @return true if the user Wrote Y, false if the use wrote F
+     */
     public static boolean yesOrNo(String message) {
+        assert !message.equals(null);
         String myMessage = message + "(" + YES_ANSWER + "/" + NO_ANSWER + ")";
         char readValue = readUpperChar(myMessage, String.valueOf(YES_ANSWER) + String.valueOf(NO_ANSWER));
 
@@ -77,23 +101,16 @@ public class IO {
             return false;
     }
 
-    public static double readDouble(String message) {
-        boolean finish = false;
-        double readValue = 0;
-        do {
-            print(message);
-            try {
-                readValue = reader.nextDouble();
-                finish = true;
-            } catch (InputMismatchException e) {
-                print(ERROR_FORMAT);
-                String toDelete = reader.next();
-            }
-        } while (!finish);
-        return readValue;
-    }
 
+    /**
+     * method to read user input integer between to two numbers
+     * @param message is a string to print
+     * @param min is the minimum number that the user can enter
+     * @param max is the maximum number that the user can enter
+     * @return the value the user entered
+     */
     public static int readInteger(String message, int min, int max) {
+        assert !message.equals(null);
         boolean finish = false;
         int readValue = 0;
         do {
@@ -109,7 +126,14 @@ public class IO {
         return readValue;
     }
 
+    /**
+     * method to read an integer grater or equal by a number
+     * @param message is a string to print
+     * @param min iC
+     * @return the value the user entered
+     */
     public static int readIntegerWithMin(String message, int min) {
+        assert !message.equals(null);
         boolean finish = false;
         int readValue = 0;
         do {
@@ -123,7 +147,13 @@ public class IO {
         return readValue;
     }
 
+    /**
+     * method to read a number
+     * @param message is a string to print
+     * @return the value the user entered
+     */
     public static int readNumber(String message) {
+        assert !message.equals(null);
         boolean finish = false;
         int readValue = 0;
         do {
@@ -139,11 +169,19 @@ public class IO {
         return readValue;
     }
 
+    /**
+     * method to read a char between the chars allowed
+     * @param message is a string to print
+     * @param allowed are the characters that the user can enter
+     * @return the character entered by the user
+     */
     public static char readUpperChar(String message, String allowed) {
+        assert !message.equals(null);
+        assert !allowed.equals(null);
         boolean finish = false;
         char readValue = '\0';
         do {
-            readValue = leggiChar(message);
+            readValue = readChar(message);
             readValue = Character.toUpperCase(readValue);
             if (allowed.indexOf(readValue) != -1)
                 finish = true;
@@ -153,7 +191,13 @@ public class IO {
         return readValue;
     }
 
-    public static char leggiChar(String message) {
+    /**
+     * method to read a char
+     * @param message is a string to print
+     * @return the character entered by the user
+     */
+    public static char readChar(String message) {
+        assert !message.equals(null);
         boolean finish = false;
         char readValue = '\0';
         do {
@@ -169,6 +213,10 @@ public class IO {
         return readValue;
     }
 
+    /**
+     * method to build a scanner
+     * @return the scanner
+     */
     private static Scanner scannerBuild() {
         Scanner created = new Scanner(System.in);
         //creato.useDelimiter(System.getProperty("line.separator"));
@@ -176,38 +224,95 @@ public class IO {
         return created;
     }
 
+    /**
+     * method to read a String
+     * @param message is a string to print
+     * @return the string entered by user
+     */
     public static String ReadString(String message) {
         print(message);
         return reader.next();
     }
 
-    public static void printPlace(Iterable<Place> list){
-        int i=1;
-
-        for(Place p:list){
-            IO.print(i+") "+ p.getName());
-            i++;
-        }
-
-    }
-    public static void printTransition(Iterable<Transition> list){
-        int i=1;
-
-        for(Transition t:list){
-            IO.print(i+") "+ t.getName());
-            i++;
-        }
-    }
-
-
-    public static void printString(List<String> list) {
-        for(int i=0; i<list.size();i++){
-            IO.print((i+1)+") "+list.get(i));
-        }
-    }
 
     /**
      * method to view the net
+     * @param net to show
+     */
+    public static void showNet(Net net) {
+        //get name and if of the net
+        String nameNet = net.getName();
+        //initialize the places and transitions arraylist
+        ArrayList<String> places = new ArrayList<String>();
+        ArrayList<String> transitions = new ArrayList<String>();
+        ArrayList<Integer> directions = new ArrayList<>();
+
+        //for every pair in the net get the name of place and name of transition
+        for (Pair p : net.getNet()) {
+            String place = p.getPlace().getName();
+            String trans = p.getTrans().getName();
+            int direction = p.getTrans().getInputOutput(p.getPlace().getName());
+            //add place to arraylist of places
+            places.add(place);
+            //add transition to arraylist of transitions
+            transitions.add(trans);
+            directions.add(direction);
+        }
+        ArrayList<Integer> order = new ArrayList<>();
+        //initialize hashmap that contains the index of place that have the same transition in common
+        HashMap<Integer, Integer> index = new HashMap<Integer, Integer>();
+        //for every transition in the arraylist check if there are other transition equal
+        for (int i = 0; i < transitions.size(); i++) {
+            for (int j = 0; j < transitions.size(); j++) {
+                //if index i and j are different, check
+                if (i != j) {
+                    //if the transition in i position is equal to the transition in j position, put the index i and j put the index i and j in the hashmap of index
+                    if (transitions.get(i).equals(transitions.get(j))) {
+                        int dir = directions.get(i);
+                        if (dir == 1) {
+                            if (!JsonManager.existAlready(index, i, j)) {
+                                index.put(i, j);
+                                order.add(0);
+                            }
+                        } else {
+                            if (!JsonManager.existAlready(index, i, j)) {
+                                index.put(i, j);
+                                order.add(1);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        //initialize new hashmap of index without the copies of the same reference
+        //HashMap<Integer, Integer> indexUpdate = checkDuplicate(index);
+        //initialize new Arraylist of couples
+        ArrayList<String> couples = new ArrayList<String>();
+        //for every element in indexUpdate initialize a String that contains the two place and the transition in common
+        int i = 0;
+        String couple = "";
+        for (Map.Entry<Integer, Integer> entry : index.entrySet()) {
+            if (order.get(i) == 0) {
+                couple = places.get(entry.getKey()) + "----->" + transitions.get(entry.getValue());
+            } else {
+                couple = places.get(entry.getKey()) + "<-----" + transitions.get(entry.getValue());
+            }
+            //add the string to the arraylist
+            couples.add(couple);
+            i++;
+        }
+
+        //print the name and id and print all the pairs with their transition
+        IO.print("\nName net: " + nameNet);
+        IO.print("List pairs:");
+        for (String s : couples) {
+            IO.print("\t" + s);
+        }
+        System.out.println();
+    }
+
+    /**
+     * method to view petri's Net
      *
      * @param net
      */
@@ -292,81 +397,40 @@ public class IO {
     }
 
     /**
-     * method to view the net
-     *
-     * @param net
+     * method This method allows you to show a list of place
+     * @param list
      */
-    public static void showNet(Net net) {
-        //get name and if of the net
-        String nameNet = net.getName();
-        String idNet = net.getID();
-        //initialize the places and transitions arraylist
-        ArrayList<String> places = new ArrayList<String>();
-        ArrayList<String> transitions = new ArrayList<String>();
-        ArrayList<Integer> directions = new ArrayList<>();
+    public static void printPlace(Iterable<Place> list){
+        int i=1;
 
-        //for every pair in the net get the name of place and name of transition
-        for (Pair p : net.getNet()) {
-            String place = p.getPlace().getName();
-            String trans = p.getTrans().getName();
-            int direction = p.getTrans().getInputOutput(p.getPlace().getName());
-            //add place to arraylist of places
-            places.add(place);
-            //add transition to arraylist of transitions
-            transitions.add(trans);
-            directions.add(direction);
-        }
-        ArrayList<Integer> order = new ArrayList<>();
-        //initialize hashmap that contains the index of place that have the same transition in common
-        HashMap<Integer, Integer> index = new HashMap<Integer, Integer>();
-        //for every transition in the arraylist check if there are other transition equal
-        for (int i = 0; i < transitions.size(); i++) {
-            for (int j = 0; j < transitions.size(); j++) {
-                //if index i and j are different, check
-                if (i != j) {
-                    //if the transition in i position is equal to the transition in j position, put the index i and j put the index i and j in the hashmap of index
-                    if (transitions.get(i).equals(transitions.get(j))) {
-                        int dir = directions.get(i);
-                        if (dir == 1) {
-                            if (!JsonManager.existAlready(index, i, j)) {
-                                index.put(i, j);
-                                order.add(0);
-                            }
-                        } else {
-                            if (!JsonManager.existAlready(index, i, j)) {
-                                index.put(i, j);
-                                order.add(1);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        //initialize new hashmap of index without the copies of the same reference
-        //HashMap<Integer, Integer> indexUpdate = checkDuplicate(index);
-        //initialize new Arraylist of couples
-        ArrayList<String> couples = new ArrayList<String>();
-        //for every element in indexUpdate initialize a String that contains the two place and the transition in common
-        int i = 0;
-        String couple = "";
-        for (Map.Entry<Integer, Integer> entry : index.entrySet()) {
-            if (order.get(i) == 0) {
-                couple = places.get(entry.getKey()) + "----->" + transitions.get(entry.getValue());
-            } else {
-                couple = places.get(entry.getKey()) + "<-----" + transitions.get(entry.getValue());
-            }
-            //add the string to the arraylist
-            couples.add(couple);
+        for(Place p:list){
+            IO.print(i+") "+ p.getName());
             i++;
         }
 
-        //print the name and id and print all the pairs with their transition
-        IO.print("\nName net: " + nameNet + "\t\tID net: " + idNet);
-        IO.print("List pairs:");
-        for (String s : couples) {
-            IO.print("\t" + s);
+    }
+
+    /**
+     * This method allows you to show a list of Transition
+     * @param list
+     */
+    public static void printTransition(Iterable<Transition> list){
+        int i=1;
+
+        for(Transition t:list){
+            IO.print(i+") "+ t.getName());
+            i++;
         }
-        System.out.println();
+    }
+
+    /**
+     * This method allows you to show a list of String
+     * @param list
+     */
+    public static void printString(List<String> list) {
+        for(int i=0; i<list.size();i++){
+            IO.print((i+1)+") "+list.get(i));
+        }
     }
 
 }

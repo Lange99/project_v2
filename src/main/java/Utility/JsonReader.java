@@ -14,7 +14,6 @@ import java.util.Scanner;
  * class to read Json file
  */
 public class JsonReader {
-    private static String path = new File("src/main/java/JsonFile").getAbsolutePath();
 
     /**
      * read file method
@@ -62,6 +61,12 @@ public class JsonReader {
         return net;
     }
 
+    /**
+     * this method allows to read a Petri's net contain in a file
+     * @param pathname
+     * @return Net
+     * @throws FileNotFoundException
+     */
     public static Net readPetriJson(String pathname) throws FileNotFoundException {
         //initialize String object that contains absolute pathname of Json directory
         String path = new File(pathname).getAbsolutePath();
