@@ -40,11 +40,10 @@ public class JsonReader {
         JSONObject objectJson = new JSONObject(sb.toString());
         //parsing the name and id of the Json file net
         String netName = objectJson.getString("@name");
-        String idNet = objectJson.getString("@net");
         //initialize the JsonArray that contains the pairs of the net
         JSONArray pairsNet = objectJson.getJSONArray("@pairs");
         //initialize new net
-        Net net = new Net(netName, idNet);
+        Net net = new Net(netName);
 
         //for every pair in the net build JsonObject composed by place and transition
         for (int i = 0; i < pairsNet.length(); i++) {
@@ -80,11 +79,11 @@ public class JsonReader {
         JSONObject objectJson = new JSONObject(sb.toString());
         //parsing the name and id of the Json file net
         String netName = objectJson.getString("@name");
-        String idNet = objectJson.getString("@net");
+
         //initialize the JsonArray that contains the pairs of the net
         JSONArray pairsNet = objectJson.getJSONArray("@pairs");
         //initialize new net
-        Net net = new Net(netName, idNet);
+        Net net = new Net(netName);
 
         //for every pair in the net build JsonObject composed by place and transition
         for (int i = 0; i < pairsNet.length(); i++) {

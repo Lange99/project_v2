@@ -17,19 +17,17 @@ public class Net {
     private ArrayList<Pair> net = new ArrayList<Pair>();
     private String ID;
     private String name;
-    private static int i;
 
 
 
     public ArrayList<Pair> getNet() {
+        assert net !=null;
         return net;
     }
 
-    public String getID() {
-        return ID;
-    }
 
     public String getName() {
+        assert name != null;
         return name;
     }
 
@@ -40,103 +38,76 @@ public class Net {
      * @param name the name that the user what to give to the net
      */
     public Net(String name) {
+        assert name!=null;
         this.name = name;
-        this.ID = name + (++i); //DA FARE CONTROLLO SULL'ID
-        addPair();
-        // addPrePost();
-    }
 
-    public Net(String name, String id) {
-        this.name = name;
-        this.ID = id;
     }
 
     /**
      * this method allow to insert a new node, it is composed by a place and a transition
      */
-    public void addPair() {
-        boolean checkPlace = false, checkTrans = false;
-        String placeName;
-        String transName;
-        int inOrOut;
 
-        do {
-            // ask to user the place's ID and the transition's ID
-            placeName = IO.readNotEmpityString(INSERT_PLACE_S_ID);
-            transName = IO.readNotEmpityString(INSERT_TRANSITION_S_ID);
-            inOrOut = IO.readInteger("Which type of connection there is between the place " + placeName + "and the transition " + transName + "? \n 1)" + placeName + " is an INPUT of " + transName + "\n 2)" + placeName + " is an OUTPUT of " + transName + "\n", 1, 2);
-            //this If check if the new node is equal to another one which is already in the net
+    public boolean addPair(Transition t, Place p, int inOrOut) {
+        assert t != null;
+        assert p != null;
+        assert inOrOut >= 0;
+        assert inOrOut <= 1;
 
-            //I create a temporary transition and a temporary place because it makes easy to check them
-            Transition t = new Transition(transName);
-            Place p = new Place(placeName);
+        //if the net is empty I don't recall the check method because this is useless
+        if (net.size() == 0) {
+            //with this if I check if the node is a in or an output
+            if (inOrOut == 1) {
+                //if this is an in I add the place to the pre
+                t.addPre(p.getName());
+            } else {
+                //if this is an in I add the place to the p0st
+                t.addPost(p.getName());
+            }
+            //we add the pair at the net because it is correct
+            net.add(new Pair(p, t));
 
+            setOfPlace.add(p);
+            setOfTrans.add(t);
 
-            //if the net is empty I don't recall the check method because this is useless
-            if (net.size() == 0) {
+        } else {
+
+            //I check if the pair is equal than an other one which already exists
+            if (checkPair(new Pair(p, t))) {
                 //with this if I check if the node is a in or an output
                 if (inOrOut == 1) {
                     //if this is an in I add the place to the pre
-                    t.addPre(placeName);
+                    t.addPre(p.getName());
                 } else {
-                    //if this is an in I add the place to the p0st
-                    t.addPost(placeName);
+                    //if this is an in I add the place to the post
+                    t.addPost(p.getName());
                 }
-                //we add the pair at the net because it is correct
                 net.add(new Pair(p, t));
-
+                //this for looks for if the place already exist
                 setOfPlace.add(p);
-                setOfTrans.add(t);
 
-            } else {
-                //I check if the pair is equal than an other one which already exists
-                if (checkPair(new Pair(p, t)) == true) {
-                    //with this if I check if the node is a in or an output
+                if (setOfTrans.add(t)) {
                     if (inOrOut == 1) {
-                        //if this is an in I add the place to the pre
-                        t.addPre(placeName);
+                        t.addPre(p.getName());
                     } else {
-                        //if this is an in I add the place to the post
-                        t.addPost(placeName);
+                        t.addPost(p.getName());
                     }
-                    net.add(new Pair(p, t));
-                    //this for looks for if the place already exist
-                    for (Place pl : setOfPlace) {
-                        if (placeName.compareTo(pl.getName()) == 0) {
-                            checkPlace = true;
-                        }
-                    }
-                    //this for looks for if the place already exist
+                } else {
                     for (Transition tr : setOfTrans) {
-                        if (transName.compareTo(tr.getName()) == 0) {
+                        if (t.getName().equals(tr.getName())) {
                             if (inOrOut == 1) {
                                 tr.addPre(p.getName());
                             } else {
                                 tr.addPost(p.getName());
                             }
-                            checkTrans = true;
                         }
                     }
-                    // 1) if checkPlace and checkTrans are false it means that the places and transitions I want to add have not been found in the sets,
-                    // 2) if checkPlace = false and checkTrans = true then it means that I have to add only the transitions in the set
-                    // 3) if checkPlace = true and checkTrans = false then it means that I have to add only the place in the set
-                    if (!checkPlace && !checkTrans) {
-                        setOfTrans.add(t);
-                        setOfPlace.add(p);
-                    } else if (!checkPlace && checkTrans) {
-                        setOfPlace.add(p);
-                    } else if (checkPlace && !checkTrans) {
-                        setOfTrans.add(t);
-                    }
-                    checkTrans = false;
-                    checkPlace = false;
-
-                } else {
-                    //I say to the user that the pair already exists
-                    System.out.println(YOU_CAN_T_ADD_THIS_PAIR_BECAUSE_ALREADY_EXISTS);
                 }
+            } else {
+                //I say to the user that the pair already exists
+                return false;
             }
-        } while (IO.yesOrNo(YOU_WANT_ADD_ANOTHER_PAIR));
+        }
+        return true;
     }
 
 
@@ -145,8 +116,13 @@ public class Net {
         net.add(pair);
     }
 
+    /**
+     * @param name this method returns a place from the set knowing the name
+     * @return the place if it finds it, null if the place doesn't exist
+     */
     //metodo per tornare un posto dal set dato il nome
     public Place getPlace(String name) {
+        assert name!=null && setOfPlace!=null;
         for (Place p : setOfPlace) {
             if (name.compareTo(p.getName()) == 0) {
                 return p;
@@ -173,6 +149,7 @@ public class Net {
      * @return false if Pair are equal
      */
     public boolean checkPair(Pair pairToCheck) {
+        assert pairToCheck.compare(null);
         for (Pair element : net) {
             if (element.compare(pairToCheck) == true) {
                 return false;
@@ -180,9 +157,14 @@ public class Net {
         }
         return true;
     }
-
+    /**
+     * this method checks if there are some pendant place
+     *
+     * @return true if there aren't pendant places
+     */
     //controllo dei nodi pendenti, da rivedere e commentare
     public boolean checkPendantNode() {
+        assert net != null;
         for (int i = 0; i < net.size(); i++) {
             boolean check = false;
             String toCheck = net.get(i).getTransName();
@@ -200,14 +182,12 @@ public class Net {
 
 
 
-
     /**
      * this algorithm checks if the graph is connect
      *
      * @return true if the net is connect
      */
     public boolean checkConnect() {
-
         String firstPlace = null;
         //HashMap di bool
         HashMap<String, Boolean> check = new HashMap<>();
@@ -226,18 +206,15 @@ public class Net {
             if (!map.containsKey(place.getName())) {
                 for (Transition trans : setOfTrans) {
                     addTempArray(temp, trans.getIdPre(), trans.getIdPost(), place.getName());
-                    /** Se trovo il mio posto di riferimento all'interno dell'array di predecessori di una transizione, ciclo i successori e li aggiungo
-                     * al mio array temporaneo
+                    /* If we find the place in the array that contains the predecessors of a transition we will check all the successor and we add them to the
+                     * temporary array
+                     * This parth of the methods allows to fill the map of the link
                      *
-                     * questo mi serve per riempire la mappa dei collegamenti;
-                     * Infatti poi userò come chiave il posto di riferimento, e come valore i suoi successori.
                      */
                 }
                 //we insert the place that we have found and have linked to the pre/post in the map
                 map.put(place.getName(), new ArrayList<>(temp));
-                //map.put(place.getName(), tempPost);
                 temp.clear();
-                //tempPost.clear();
             } else {
                 //If the key already exist  we add the new place to its array
                 for (Transition trans : setOfTrans) {
@@ -287,6 +264,11 @@ public class Net {
      * @param placeName
      */
     public void addTempArray(ArrayList<String> temp, ArrayList<String> firstArrayOfPlace, ArrayList<String> secondArrayOfPlace, String placeName) {
+        assert temp.size()!=0;
+        assert firstArrayOfPlace.size()!=0;
+        assert secondArrayOfPlace.size()!=0;
+        assert !placeName.equals(null);
+
         for (String name : firstArrayOfPlace) { //this for checks if that place is in the post of the transition
             if (name.equals(placeName)) {
                 temp.addAll(secondArrayOfPlace);
@@ -305,6 +287,10 @@ public class Net {
      * @param key     is the key to the place to recursion, it does not have to be empty
      */
     public void recursion(HashMap<String, ArrayList<String>> map, HashMap<String, Boolean> boolmap, String key) {
+        assert !map.isEmpty();
+        assert !boolmap.isEmpty();
+        assert !key.equals(null);
+
         boolmap.replace(key, true);
         for (String nextKey : map.get(key)) {
             if (!boolmap.get(nextKey)) {
@@ -313,8 +299,14 @@ public class Net {
         }
 
     }
-
+    /**
+     * this method check if there is only transition in input or only in outup
+     *
+     * @return true if it is correct, false it isn't
+     *
+     */
     public boolean checkTrans() {
+        assert !setOfTrans.isEmpty();
         for (Transition t : setOfTrans) {
             if (t.sizePre() == 0 || t.sizePost() == 0) {
                 return false;
@@ -323,7 +315,14 @@ public class Net {
         return true;
     }
 
+    /**
+     * this method research a transition in the net's set of transitions
+     * @param nameTrans the name of the transition that we are looking for
+     * @return the transition if we find it, or null if the transition doesn't exist
+     */
     public Transition researchTrans(String nameTrans){
+        assert nameTrans!=null;
+        assert getSetOfTrans().size()!=0;
         for(Transition t: getSetOfTrans()){
             if(t.getName().equals(nameTrans)){
                 return  t;
@@ -332,8 +331,14 @@ public class Net {
     return null;
     }
 
-
+    /**
+     * this method research a place in the net's set of place
+     * @param namePlace the name of the place that we are looking for
+     * @return the transition if we find it, or null if the place doesn't exist
+     */
     public Place researchPlace(String namePlace){
+        assert namePlace!=null;
+        assert getSetOfPlace().size()!=0;
         for(Place p: getSetOfPlace()){
             if(p.getName().equals(namePlace)){
                 return  p;
@@ -342,7 +347,16 @@ public class Net {
         return null;
     }
 
+    /**
+     * this method research a pair in the net
+     * @param t the transition of the pair
+     * @param p the place of the pair
+     * @return the pair that we are looking for if we find it, else null
+     */
     public Pair researchPair(Transition t, Place p){
+        assert t!=null;
+        assert p!=null;
+        assert getSetOfPlace().size()!=0;
         for(Pair pair: getNet()){
             if(pair.getPlace().equals(p) && pair.getTrans().equals(t)){
                 return  pair;
@@ -376,10 +390,12 @@ public class Net {
         }
     }
     public HashSet<Place> getSetOfPlace() {
+        assert setOfPlace.size()!=0;
         return setOfPlace;
     }
 
     public HashSet<Transition> getSetOfTrans() {
+        assert setOfTrans.size()!=0;
         return setOfTrans;
     }
 
@@ -388,7 +404,7 @@ public class Net {
         this.setOfPlace.addAll(_net.setOfPlace);
         this.setOfTrans.addAll(_net.setOfTrans);
         this.name = _net.getName();
-        this.ID = _net.getID();
+
     }
 
 }

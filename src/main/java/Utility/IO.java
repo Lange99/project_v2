@@ -9,6 +9,7 @@ import java.io.File;
 import java.util.*;
 
 public class IO {
+    public static final String DO_YOU_WANT_TO_ADD_TOKEN_TO_PLACE = "Do you want to add token to place ? ";
     public static final String THERE_AREN_T_ANY_FILES_TO_LOAD = "There aren't any files to load";
     public static final String INSERT_PLACE_S_ID = "Insert place's Name ";
     public static final String INSERT_TRANSITION_S_ID = "Insert transition's Name ";
