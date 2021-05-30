@@ -55,7 +55,7 @@ public class JsonManager {
      * @param pathname
      * @return the number of file i
      */
-    private static int checkNumFile(String[] pathname) {
+    public static int checkNumFile(String[] pathname) {
         assert !pathname.equals(null);
         int i = 0;
         //for every name file in the directory print the name
@@ -73,7 +73,7 @@ public class JsonManager {
      * @param path
      * @return pathname
      */
-    private static String[] getPathname(String path) {
+    public static String[] getPathname(String path) {
         assert !path.equals(null);
         //initialize the File object directory
         File directory = new File(path);

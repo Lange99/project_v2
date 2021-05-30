@@ -138,7 +138,7 @@ public class JsonWriter {
      * @param net
      * @return stringJson
      */
-    private static String stringPetriNet(PetriNet net) {
+    public static String stringPetriNet(PetriNet net) {
         //initalize the Arraylist of pairs of the net
         ArrayList<Pair> pairsList = net.getNet();
 
