@@ -3,9 +3,12 @@ package Project_v2;
 import java.util.*;
 
 public class PetriNet extends Net {
-    public static final String HOW_MANY_TOKEN = "How many tokens do you want this place to have?\n(if you don't want tokens enter 0)";
 
     private static final HashMap<Pair, Integer> initialMarking = new HashMap<>();
+
+    public static HashMap<Pair, Integer> getInitialMarking() {
+        return initialMarking;
+    }
 
     public PetriNet(Net genericNet) {
         super(genericNet);;
@@ -44,18 +47,47 @@ public class PetriNet extends Net {
     public void addWeightToPair(Pair pair, int weight) {
         pair.setWeight(weight);
     }
-/*
+
+
+    /**
+     * Override of the equals method which allows me to check if two petri nets are equal
+     * @param obj is element to check
+     * @return true if two Petri's Net are equals
+     */
     @Override
     public boolean equals(Object obj) {
+
         assert obj instanceof PetriNet;
+        assert obj != null;
+        int tokenNumber;
         PetriNet pt = (PetriNet) obj;
-        if (super.getName().equals((pt.getName())){
-            return true;
+        int numberOfPlace= pt.getSetOfPlace().size() ;
+        int numberOfTrans = pt.getSetOfTrans().size();
+
+        //If they have a different number of places and transitions I know they are two different networks
+        if (numberOfPlace != super.getSetOfPlace().size() || numberOfTrans != super.getSetOfTrans().size()){
+            return false;
         }
-        if ()
-        return super.equals(obj);
+
+        //Check if the sets of transitions and places are the same, if they are different the two networks are different
+        if(!super.getSetOfPlace().containsAll(pt.getSetOfPlace())){
+            return false;
+        }
+        if(!super.getSetOfTrans().containsAll(pt.getSetOfTrans())){
+            return false;
+        }
+
+        //At this point I check the initial marking,
+        // if two places have a different number of tokens it means that the initial marking of the two networks is different
+        for (Pair p: super.getNet()) {
+           tokenNumber = (pt.getInitialMarking().get(p));
+           if (tokenNumber!=initialMarking.get(p)) {
+               return false;
+           }
+        }
+        return true;
     }
-    */
+
 
 }
 
