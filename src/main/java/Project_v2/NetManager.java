@@ -83,6 +83,28 @@ public class NetManager {
     }
 
 
+    /**
+     * Method that compares a petri net with those saved in the PetriNetList
+     *
+     * @param net is the net to check;
+     * @return false if two net are equal
+     */
+    public boolean checkPetriNet(PetriNet net)  {
+        try {
+            if(existsAlreadyPetriNet(net)){
+                return false;
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        for (PetriNet n : petriNetList) {
+            if (net.equals(n)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     //Metodo per la creazione di petri net;
     public void addPetriNet() {
         PetriNet newPetriNet = new PetriNet(loadOneNet());
@@ -100,10 +122,12 @@ public class NetManager {
         addWeightToPetriNet(newPetriNet);
 
 
-        if (IO.yesOrNo(IO.DO_YOU_WANT_TO_SAVE_THAT_PETRI_S_NET)) {
-            JsonWriter.writeJsonPetri(newPetriNet);
+        if (checkPetriNet(newPetriNet)) {
+            if (IO.yesOrNo(IO.DO_YOU_WANT_TO_SAVE_THAT_PETRI_S_NET)) {
+                JsonWriter.writeJsonPetri(newPetriNet);
+            }
+            petriNetList.add(newPetriNet);
         }
-        petriNetList.add(newPetriNet);
     }
 
     private void addWeightToPetriNet(PetriNet newPetriNet) {
