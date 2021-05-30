@@ -15,10 +15,12 @@ public class Net {
     private HashSet<Place> setOfPlace = new HashSet<Place>();
     private HashSet<Transition> setOfTrans = new HashSet<Transition>();
     private ArrayList<Pair> net = new ArrayList<Pair>();
-    private String ID;
     private String name;
 
-
+    public void setName(String _name){
+        assert !_name.equals(null);
+        name = _name;
+    }
 
     public ArrayList<Pair> getNet() {
         assert net !=null;

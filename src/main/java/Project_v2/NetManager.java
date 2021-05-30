@@ -15,8 +15,9 @@ import java.util.Map;
 
 public class NetManager {
 
-    private ArrayList<Net> netList = new ArrayList<Net>();
-    private ArrayList<PetriNet> petriNetList = new ArrayList<PetriNet>();
+    private final ArrayList<Net> netList = new ArrayList<Net>();
+    private final ArrayList<PetriNet> petriNetList = new ArrayList<PetriNet>();
+
     /**
      * this method handles the interface with the user
      *
@@ -54,8 +55,7 @@ public class NetManager {
                             netList.add(newNet);
                             IO.showNet(newNet);
                         }
-                    }
-                    else {
+                    } else {
                         Net newNet = JsonManager.loadNet(IO.JSON_PETRI_FILE);
                         if (newNet != null) {
                             netList.add(newNet);
@@ -83,17 +83,21 @@ public class NetManager {
     //Metodo per la creazione di petri net;
     public void addPetriNet() {
         PetriNet newPetriNet = new PetriNet(loadOneNet());
+        newPetriNet.setName(IO.NAME_OF_NET);
+        while (!checkPetriNetName(newPetriNet.getName())){
+            IO.print(IO.SET_NEW_NAME);
+            newPetriNet.setName(IO.readNotEmptyString(IO.NAME_OF_NET));
+        }
         //we add the token to the place
-        while (IO.yesOrNo(IO.DO_YOU_WANT_TO_ADD_TOKEN_TO_PLACE)){
+        while (IO.yesOrNo(IO.DO_YOU_WANT_TO_ADD_TOKEN_TO_PLACE)) {
             addTokentoPetriNet(newPetriNet);
         }
-
 
         //we add the weight to the transition
         addWeightToPetriNet(newPetriNet);
 
 
-        if(IO.yesOrNo(IO.DO_YOU_WANT_TO_SAVE_THAT_PETRI_S_NET)){
+        if (IO.yesOrNo(IO.DO_YOU_WANT_TO_SAVE_THAT_PETRI_S_NET)) {
             JsonWriter.writeJsonPetri(newPetriNet);
         }
         petriNetList.add(newPetriNet);
@@ -106,7 +110,7 @@ public class NetManager {
 
             //qua scelgo la transizione da modificare
             IO.printTransition(transTemp);
-            int choose = IO.readInteger(IO.TRANSITION_CHOOSE, 0, transTemp.size())-1;
+            int choose = IO.readInteger(IO.TRANSITION_CHOOSE, 0, transTemp.size()) - 1;
 
             //qui mostro i pre e i post della transizione collegata
             ArrayList<String> placeTemp = new ArrayList<>();
@@ -114,16 +118,12 @@ public class NetManager {
             placeTemp.addAll(transTemp.get(choose).getIdPost());
 
             do {
-
-
                 IO.printString(placeTemp);
-
                 //qui chiedo quale transazione-posto vuole modificare
-                String placeToChange = placeTemp.get(IO.readInteger("What place you want change?", 0, placeTemp.size())-1);
+                String placeToChange = placeTemp.get(IO.readInteger("What place you want change?", 0, placeTemp.size()) - 1);
                 int weight = IO.readIntegerWithMin("Insert the weight that you want to give to the place", 0);
                 newPetriNet.addWeight(transTemp.get(choose).getName(), placeToChange, weight);
-            }while(IO.yesOrNo("Do you want to add other weights to this transition?"));
-
+            } while (IO.yesOrNo("Do you want to add other weights to this transition?"));
 
 
         }
@@ -139,15 +139,13 @@ public class NetManager {
         int choise = IO.readInteger("where do you want to add the tokens?", 0, tempPlace.size());
         int token = IO.readIntegerWithMin("Insert the number of tokens: ", 0);
 
-        String  placeId = tempPlace.get(choise-1).getName();
+        String placeId = tempPlace.get(choise - 1).getName();
 
-        if(newPetriNet.addToken(placeId, token)){
+        if (newPetriNet.addToken(placeId, token)) {
             IO.print("The weight has been added");
-        }else{
+        } else {
             IO.print("The place doesn't exist");
         }
-
-
     }
 
     /**
@@ -160,6 +158,10 @@ public class NetManager {
 
         do {
             Net n = new Net(IO.readNotEmptyString(IO.NAME_OF_NET));
+            while (!checkNetName(n.getName())){
+                IO.print(IO.SET_NEW_NAME);
+                n.setName(IO.readNotEmptyString(IO.NAME_OF_NET));
+            }
             do {
                 // ask to user the place's ID and the transition's ID
                 placeName = IO.readNotEmptyString(IO.INSERT_PLACE_S_ID);
@@ -170,7 +172,7 @@ public class NetManager {
                 //I create a temporary transition and a temporary place because it makes easy to check them
                 Transition t = new Transition(transName);
                 Place p = new Place(placeName);
-                if(!n.addPair(t, p, inOrOut)){
+                if (!n.addPair(t, p, inOrOut)) {
                     System.out.println(IO.YOU_CAN_T_ADD_THIS_PAIR_BECAUSE_ALREADY_EXISTS);
                 }
             } while (IO.yesOrNo(IO.YOU_WANT_ADD_ANOTHER_PAIR));
@@ -199,20 +201,15 @@ public class NetManager {
      * @return false if there are some problems and if there is one or more pendant connection
      */
     public boolean checkNet(Net n) {
-//if there is a problem the method return false
-        if (n.checkPendantNode() == false) {
-
-            return false;
-        } else {
-            return true;
-        }
+        //if there is a problem the method return false
+        return n.checkPendantNode();
     }
 
     //metodo che stampa tutte le net in netlist e ne restituisce una scelta dall'utente
     public Net loadOneNet() {
 
         for (int i = 0; i < netList.size(); i++) {
-           IO.print(i + ") " + netList.get(i).getName());
+            IO.print(i + ") " + netList.get(i).getName());
 
         }
         int choise = IO.readInteger("choose the network number ", 0, netList.size());
@@ -248,7 +245,7 @@ public class NetManager {
             }
             ctrl = 0;
             //get pathname of the file
-            String path = IO.JSON_FILE+"/" + pathname[i];
+            String path = IO.JSON_FILE + "/" + pathname[i];
             //build a net by the file
             Net net = JsonReader.readJson(path);
             //get all pairs of the net
@@ -276,4 +273,30 @@ public class NetManager {
         return true;
     }
 
+    /**
+     * Method that allows you to check that the name of a network is not the same as the existing networks
+     * @param netName is the name of the Net
+     * @return true if there are no networks with this name
+     */
+    public boolean checkNetName(String netName) {
+        for (Net n : netList) {
+            if (n.getName().equals(netName)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    /**
+     * Method that allows you to check that the name of a Petri's network is not the same as the existing Petri's networks
+     * @param petriNetName is the name of the Petri's Net
+     * @return true if there are no Petri's net with this name
+     */
+    public boolean checkPetriNetName(String petriNetName) {
+        for (PetriNet n : petriNetList) {
+            if (n.getName().equals(petriNetName)) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

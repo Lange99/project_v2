@@ -9,6 +9,7 @@ import java.io.File;
 import java.util.*;
 
 public class IO {
+    public static final String SET_NEW_NAME = "A network with this name already exists, please enter a different name";
     public static final String DO_YOU_WANT_TO_SAVE_THAT_PETRI_S_NET = "Do you want to save that Petri's Net?";
     public static final String DO_YOU_WANT_TO_ADD_TOKEN_TO_PLACE = "Do you want to add token to place ? ";
     public static final String THERE_AREN_T_ANY_FILES_TO_LOAD = "There aren't any files to load";
