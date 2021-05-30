@@ -4,6 +4,8 @@ import Utility.IO;
 import Utility.JsonManager;
 import Utility.JsonReader;
 import Utility.JsonWriter;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 
 import java.io.File;
@@ -12,6 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 public class NetManager {
 
@@ -274,7 +277,35 @@ public class NetManager {
     }
 
     /**
-     * Method that allows you to check that the name of a network is not the same as the existing networks
+     * Method to check if the petri net insert exist already or is new and it is possible add it
+     * @param newPetriNetToCheck
+     * @return true if there is already the same net, false if there isn't
+     * @throws FileNotFoundException
+     */
+    public boolean existsAlreadyPetriNet(PetriNet newPetriNetToCheck) throws FileNotFoundException {
+        assert newPetriNetToCheck != null;
+        // bulld array String of the list of all file in JsonPetri directory
+        String[] pathname = JsonManager.getPathname(IO.JSON_PETRI_FILE);
+        //initialize StringBuilder object
+        String stringOfNewPetriNetToCheck = JsonWriter.stringPetriNet(newPetriNetToCheck);
+
+        for (String pathnameOfFileToCheck: pathname) {
+            //initialize Scanner object
+            Scanner sc = new Scanner(new File(pathnameOfFileToCheck));
+            //initialize StringBuilder object
+            StringBuilder sbExitingPetriNet = new StringBuilder();
+            //while Scanner detect new line append to StringBuilder object the line of json file
+            while (sc.hasNextLine()) {
+                sbExitingPetriNet.append(sc.nextLine()).append("\n");
+            }
+            String stringExistingPetriNet = sbExitingPetriNet.toString();
+            if (stringExistingPetriNet.equals(stringOfNewPetriNetToCheck)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    /* * Method that allows you to check that the name of a network is not the same as the existing networks
      * @param netName is the name of the Net
      * @return true if there are no networks with this name
      */
