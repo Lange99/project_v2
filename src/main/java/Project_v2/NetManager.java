@@ -4,12 +4,17 @@ import Utility.IO;
 import Utility.JsonManager;
 import Utility.JsonReader;
 import Utility.JsonWriter;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
 
 public class NetManager {
 
@@ -77,43 +82,28 @@ public class NetManager {
 
     }
 
-    /**
-     * Method that compares a petri net with those saved in the PetriNetList
-     *
-     * @param net is the net to check;
-     * @return false if two net are equal
-     */
-    public boolean checkPetriNet(PetriNet net) {
-        for (PetriNet n : petriNetList) {
-            if (net.equals(n)) {
-                return false;
-            }
-        }
-        return true;
-    }
 
     //Metodo per la creazione di petri net;
     public void addPetriNet() {
         PetriNet newPetriNet = new PetriNet(loadOneNet());
         newPetriNet.setName(IO.NAME_OF_NET);
-        while (!checkPetriNetName(newPetriNet.getName())) {
+        while (!checkPetriNetName(newPetriNet.getName())){
             IO.print(IO.SET_NEW_NAME);
             newPetriNet.setName(IO.readNotEmptyString(IO.NAME_OF_NET));
         }
         //we add the token to the place
         while (IO.yesOrNo(IO.DO_YOU_WANT_TO_ADD_TOKEN_TO_PLACE)) {
-            addTokenToPetriNet(newPetriNet);
+            addTokentoPetriNet(newPetriNet);
         }
 
         //we add the weight to the transition
         addWeightToPetriNet(newPetriNet);
 
-        if (checkPetriNet(newPetriNet)) {
-            if (IO.yesOrNo(IO.DO_YOU_WANT_TO_SAVE_THAT_PETRI_S_NET)) {
-                JsonWriter.writeJsonPetri(newPetriNet);
-            }
-            petriNetList.add(newPetriNet);
+
+        if (IO.yesOrNo(IO.DO_YOU_WANT_TO_SAVE_THAT_PETRI_S_NET)) {
+            JsonWriter.writeJsonPetri(newPetriNet);
         }
+        petriNetList.add(newPetriNet);
     }
 
     private void addWeightToPetriNet(PetriNet newPetriNet) {
@@ -143,7 +133,7 @@ public class NetManager {
 
     }
 
-    private void addTokenToPetriNet(PetriNet newPetriNet) {
+    private void addTokentoPetriNet(PetriNet newPetriNet) {
 
         ArrayList<Place> tempPlace = new ArrayList<>(newPetriNet.getSetOfPlace());
 
@@ -171,7 +161,7 @@ public class NetManager {
 
         do {
             Net n = new Net(IO.readNotEmptyString(IO.NAME_OF_NET));
-            while (!checkNetName(n.getName())) {
+            while (!checkNetName(n.getName())){
                 IO.print(IO.SET_NEW_NAME);
                 n.setName(IO.readNotEmptyString(IO.NAME_OF_NET));
             }
@@ -287,8 +277,35 @@ public class NetManager {
     }
 
     /**
-     * Method that allows you to check that the name of a network is not the same as the existing networks
-     *
+     * Method to check if the petri net insert exist already or is new and it is possible add it
+     * @param newPetriNetToCheck
+     * @return true if there is already the same net, false if there isn't
+     * @throws FileNotFoundException
+     */
+    public boolean existsAlreadyPetriNet(PetriNet newPetriNetToCheck) throws FileNotFoundException {
+        assert newPetriNetToCheck != null;
+        // bulld array String of the list of all file in JsonPetri directory
+        String[] pathname = JsonManager.getPathname(IO.JSON_PETRI_FILE);
+        //initialize StringBuilder object
+        String stringOfNewPetriNetToCheck = JsonWriter.stringPetriNet(newPetriNetToCheck);
+
+        for (String pathnameOfFileToCheck: pathname) {
+            //initialize Scanner object
+            Scanner sc = new Scanner(new File(pathnameOfFileToCheck));
+            //initialize StringBuilder object
+            StringBuilder sbExitingPetriNet = new StringBuilder();
+            //while Scanner detect new line append to StringBuilder object the line of json file
+            while (sc.hasNextLine()) {
+                sbExitingPetriNet.append(sc.nextLine()).append("\n");
+            }
+            String stringExistingPetriNet = sbExitingPetriNet.toString();
+            if (stringExistingPetriNet.equals(stringOfNewPetriNetToCheck)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    /* * Method that allows you to check that the name of a network is not the same as the existing networks
      * @param netName is the name of the Net
      * @return true if there are no networks with this name
      */
@@ -300,10 +317,8 @@ public class NetManager {
         }
         return true;
     }
-
     /**
      * Method that allows you to check that the name of a Petri's network is not the same as the existing Petri's networks
-     *
      * @param petriNetName is the name of the Petri's Net
      * @return true if there are no Petri's net with this name
      */
