@@ -137,4 +137,12 @@ public class Transition {
         }
         return false;
     }
+
+    public String getIdPreviusPlaceByIndex(int i) {
+        return idPre.get(i);
+    }
+
+    public String getIdPostPlaceByIndex(int i) {
+        return idPost.get(i);
+    }
 }

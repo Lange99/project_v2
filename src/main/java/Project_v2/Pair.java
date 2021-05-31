@@ -73,4 +73,16 @@ public class Pair {
         assert !place.getName().equals(null);
         return  place.getName();
     }
+
+    public int getNumberOfToken() {
+        return place.getNumberOfToken();
+    }
+
+    public String getIdPreviusPlaceByIndex(int i) {
+        return trans.getIdPreviusPlaceByIndex(i);
+    }
+
+    public String getIdPostPlaceByIndex(int i) {
+        return trans.getIdPostPlaceByIndex(i);
+    }
 }

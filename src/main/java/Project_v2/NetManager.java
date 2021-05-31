@@ -11,6 +11,8 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.math.BigInteger;
+import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -53,16 +55,16 @@ public class NetManager {
                 case 2:
                     int typeNet = IO.readInteger(IO.TYPE_OF_NET, 1, 2);
                     if (typeNet == 1) {
-                        Net newNet = JsonManager.loadNet(IO.JSON_FILE);
+                        Net newNet = JsonManager.loadNet();
                         if (newNet != null) {
                             netList.add(newNet);
                             IO.showNet(newNet);
                         }
                     } else {
-                        Net newNet = JsonManager.loadNet(IO.JSON_PETRI_FILE);
+                        PetriNet newNet = JsonManager.loadPetriNet();
                         if (newNet != null) {
                             netList.add(newNet);
-                            IO.showNet(newNet);
+                            IO.showPetriNet(newNet);
                         }
                     }
                     check = IO.yesOrNo(IO.WANT_TO_DO_ANOTHER_OPERATION);
@@ -78,7 +80,7 @@ public class NetManager {
                     break;
 
             }
-        } while (check == true);
+        } while (check);
 
     }
 
@@ -310,21 +312,32 @@ public class NetManager {
         assert newPetriNetToCheck != null;
         // bulld array String of the list of all file in JsonPetri directory
         String[] pathname = JsonManager.getPathname(IO.JSON_PETRI_FILE);
-        //initialize StringBuilder object
-        String stringOfNewPetriNetToCheck = JsonWriter.stringPetriNet(newPetriNetToCheck);
+
+        String nameNetToCheck = newPetriNetToCheck.getName();
+        ArrayList<String> pairsNetToCheck = getStringPairsFromPetriNet(newPetriNetToCheck);
+        int sizePairsNetToCheck = pairsNetToCheck.size();
 
         for (String pathnameOfFileToCheck: pathname) {
-            //initialize Scanner object
-            Scanner sc = new Scanner(new File(pathnameOfFileToCheck));
-            //initialize StringBuilder object
-            StringBuilder sbExitingPetriNet = new StringBuilder();
-            //while Scanner detect new line append to StringBuilder object the line of json file
-            while (sc.hasNextLine()) {
-                sbExitingPetriNet.append(sc.nextLine()).append("\n");
+            PetriNet existingNet = JsonReader.readPetriJson(pathnameOfFileToCheck);
+            ArrayList<String> pairsExistingNet = getStringPairsFromPetriNet(existingNet);
+            int counter = 0;
+            int sizeArrayPairsExistingNet = pairsExistingNet.size();
+
+            if (sizePairsNetToCheck == sizeArrayPairsExistingNet) {
+                for (String toCheck: pairsNetToCheck) {
+                    for (String existing: pairsExistingNet) {
+                        if (toCheck.equals(existing)) {
+                            counter = counter + 1;
+                            continue;
+                        }
+                    }
+                }
+                if (counter == sizePairsNetToCheck) {
+                    return true;
+                }
             }
-            String stringExistingPetriNet = sbExitingPetriNet.toString();
-            if (stringExistingPetriNet.equals(stringOfNewPetriNetToCheck)) {
-                return true;
+            else {
+                continue;
             }
         }
         return false;
@@ -355,4 +368,38 @@ public class NetManager {
         return true;
     }
 
+    private ArrayList<String> getStringPairsFromPetriNet(PetriNet net) {
+        int i = 0;
+        ArrayList<String> stringPair = new ArrayList<>();
+        for (Pair pair: net.getNet()) {
+            String placeName = pair.getPlaceName();
+            String tokenNumber = String.valueOf(pair.getNumberOfToken());
+            String transitionName = pair.getTransName();
+            String weightNumber = String.valueOf(pair.getWeight());
+            String placeNameOfPrePlace = pair.getIdPreviusPlaceByIndex(i);
+            String placeNameOfPostPlace = pair.getIdPostPlaceByIndex(i);
+            String stringToElaborate = "Name: " + placeName + "\n" +
+                    "Token: " + tokenNumber + "\n" +
+                    "Transition: " + transitionName + "\n" +
+                    "Weight: " + weightNumber + "\n" +
+                    "First place: " + placeNameOfPrePlace + "\n" +
+                    "Second place: " + placeNameOfPostPlace + "\n";
+            String stringToAdd = getHashcode(stringToElaborate);
+            stringPair.add(stringToAdd);
+        }
+        return stringPair;
+    }
+
+    private String getHashcode(String stringToEncrypt) {
+        String sha1 = null;
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-1");
+            digest.reset();
+            digest.update(stringToEncrypt.getBytes("utf8"));
+            sha1 = String.format("%040x", new BigInteger(1, digest.digest()));
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return sha1;
+    }
 }

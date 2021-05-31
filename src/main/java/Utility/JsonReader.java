@@ -1,9 +1,6 @@
 package Utility;
 
-import Project_v2.Net;
-import Project_v2.Pair;
-import Project_v2.Transition;
-import Project_v2.Place;
+import Project_v2.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -71,7 +68,7 @@ public class JsonReader {
      * @return Net
      * @throws FileNotFoundException
      */
-    public static Net readPetriJson(String pathname) throws FileNotFoundException {
+    public static PetriNet readPetriJson(String pathname) throws FileNotFoundException {
         //initialize String object that contains absolute pathname of Json directory
         String path = new File(pathname).getAbsolutePath();
 
@@ -93,7 +90,8 @@ public class JsonReader {
         //initialize the JsonArray that contains the pairs of the net
         JSONArray pairsNet = objectJson.getJSONArray("@pairs");
         //initialize new net
-        Net net = new Net(netName);
+        Net netToConvert = new Net(netName);
+        PetriNet net = new PetriNet(netToConvert);
 
         //for every pair in the net build JsonObject composed by place and transition
         for (int i = 0; i < pairsNet.length(); i++) {

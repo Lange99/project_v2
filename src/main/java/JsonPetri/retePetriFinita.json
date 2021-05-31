@@ -1,6 +1,5 @@
 {
   "@name": "nuovaRetePetri",
-  "@net": "nuovaRetePetri1",
   "@pairs": [
     {
       "@direction": "1",
