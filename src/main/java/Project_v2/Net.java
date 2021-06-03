@@ -84,6 +84,7 @@ public class Net {
                         //if this is an in I add the place to the post
                         t.addPost(p.getName());
                     }
+                    net.add(new Pair(p, t));
                 } else {
                     for (Transition tr : setOfTrans) {
                         if (t.getName().equals(tr.getName())) {
@@ -91,11 +92,16 @@ public class Net {
                                 tr.addPre(p.getName());
                             } else {
                                 tr.addPost(p.getName());
+
                             }
+
+                            net.add(new Pair(p, tr));
                         }
+
                     }
+
                 }
-                net.add(new Pair(p, t));
+
                 //this for looks for if the place already exist
                 setOfPlace.add(p);
 

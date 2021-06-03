@@ -63,7 +63,7 @@ public class NetManager {
                     } else {
                         PetriNet newNet = JsonManager.loadPetriNet();
                         if (newNet != null) {
-                            netList.add(newNet);
+                            petriNetList.add(newNet);
                             IO.showPetriNet(newNet);
                         }
                     }
@@ -318,7 +318,7 @@ public class NetManager {
         int sizePairsNetToCheck = pairsNetToCheck.size();
 
         for (String pathnameOfFileToCheck: pathname) {
-            PetriNet existingNet = JsonReader.readPetriJson(pathnameOfFileToCheck);
+            PetriNet existingNet = JsonReader.readPetriJson(IO.JSON_PETRI_FILE+pathnameOfFileToCheck);
             ArrayList<String> pairsExistingNet = getStringPairsFromPetriNet(existingNet);
             int counter = 0;
             int sizeArrayPairsExistingNet = pairsExistingNet.size();
@@ -386,6 +386,7 @@ public class NetManager {
                     "Second place: " + placeNameOfPostPlace + "\n";
             String stringToAdd = getHashcode(stringToElaborate);
             stringPair.add(stringToAdd);
+
         }
         return stringPair;
     }

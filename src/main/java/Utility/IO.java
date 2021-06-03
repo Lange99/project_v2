@@ -37,7 +37,7 @@ public class IO {
     public static final String THE_NET_IS_CORRECT_WE_ARE_GOING_TO_SAVE_IT = "The net is correct, we are going to save it";
     public static final String NO_NORMAL_NET = "There aren't any nets! You have to insert or load a net before adding a Petri Net";
     public static final String JSON_FILE = "src/main/java/JsonFile";
-    public static final String JSON_PETRI_FILE = "src/main/java/JsonPetri";
+    public static final String JSON_PETRI_FILE = "src/main/java/JsonPetri/";
     public static final String HOW_MANY_TOKEN = "How many tokens do you want this place to have?\n(if you don't want tokens enter 0)";
     private final static String ERROR_FORMAT = "Warning: the entered data are in the wrong format.";
     private final static String MINIMUM_ERROR = "Warning: the value must to be grater or equal to ";
