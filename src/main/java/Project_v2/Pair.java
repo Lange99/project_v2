@@ -5,7 +5,7 @@ public class Pair {
     private Transition trans;
     private int weight = 1;
 
-    public  Pair(Place place, Transition trans){
+    public Pair(Place place, Transition trans){
         assert !place.equals(null);
         this.place=place;
         this.trans=trans;
@@ -38,6 +38,15 @@ public class Pair {
         this.weight = weight;
     }
 
+    public Pair(Place place, Transition transition, int weight) {
+        assert place != null;
+        assert transition != null;
+        assert weight >= 0;
+        this.place = place;
+        this.trans = transition;
+        this.weight = weight;
+    }
+
     public void setWeight(int weight) {
         this.weight = weight;
     }
@@ -49,12 +58,12 @@ public class Pair {
     public Place getPlace() {
         return place;
     }
+
     /**
      * this method check if the current pair is equal to the other one
      * @param toCompare the pair which is compared
      * @return true if the pairs are equal
      */
-
     public boolean compare(Pair toCompare) {
         assert !toCompare.compare(null);
         //check if the place's ID is equal to the toCompare's ID, and then check if the trans'S ID is equal to the toCOmpare'S ID

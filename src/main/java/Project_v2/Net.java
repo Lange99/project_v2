@@ -369,29 +369,7 @@ public class Net {
     }
 
 
-    /**
-     * this method allows to fill the sets of places and transitions starting from an already existing net
-     */
-    public void fillSet() {
-        int i;
-        boolean check = false;
-        for (i = 0; i < net.size(); i++) {
-            for (Transition t : setOfTrans) {
-                if (net.get(i).getTransName().compareTo(t.getName()) == 0) {
-                    check = true;
-                }
-            }
-            if(!check) setOfTrans.add(net.get(i).getTrans());
-            check=false;
-            for (Place p : setOfPlace) {
-                if (net.get(i).getPlaceName().compareTo(p.getName()) == 0) {
-                    check=true;
-                }
-            }
-            if(!check)setOfPlace.add(net.get(i).getPlace());
-            check=false;
-        }
-    }
+
     public HashSet<Place> getSetOfPlace() {
         assert setOfPlace.size()!=0;
         return setOfPlace;
@@ -400,6 +378,16 @@ public class Net {
     public HashSet<Transition> getSetOfTrans() {
         assert setOfTrans.size()!=0;
         return setOfTrans;
+    }
+
+    public void addSetofPlace(Place placeToAdd) {
+        assert placeToAdd != null;
+        setOfPlace.add(placeToAdd);
+    }
+
+    public void addSetofTransition(Transition transitionToAdd) {
+        assert transitionToAdd != null;
+        setOfTrans.add(transitionToAdd);
     }
 
     public Net(Net _net) {

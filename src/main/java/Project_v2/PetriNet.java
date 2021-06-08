@@ -11,7 +11,7 @@ public class PetriNet extends Net {
     }
 
     public PetriNet(Net genericNet) {
-        super(genericNet);;
+        super(genericNet);
         saveInitialMark();
     }
 

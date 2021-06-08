@@ -20,8 +20,8 @@ import java.util.Scanner;
 
 public class NetManager {
 
-    private final ArrayList<Net> netList = new ArrayList<Net>();
-    private final ArrayList<PetriNet> petriNetList = new ArrayList<PetriNet>();
+    private final ArrayList<Net> netList = new ArrayList<>();
+    private final ArrayList<PetriNet> petriNetList = new ArrayList<>();
 
     /**
      * this method handles the interface with the user
@@ -110,7 +110,7 @@ public class NetManager {
     //Metodo per la creazione di petri net;
     public void addPetriNet() {
         PetriNet newPetriNet = new PetriNet(loadOneNet());
-        newPetriNet.setName(IO.NAME_OF_NET);
+        newPetriNet.setName(IO.ReadString(IO.NAME_OF_NET));
         while (!checkPetriNetName(newPetriNet.getName())){
             IO.print(IO.SET_NEW_NAME);
             newPetriNet.setName(IO.readNotEmptyString(IO.NAME_OF_NET));
@@ -386,7 +386,6 @@ public class NetManager {
                     "Second place: " + placeNameOfPostPlace + "\n";
             String stringToAdd = getHashcode(stringToElaborate);
             stringPair.add(stringToAdd);
-
         }
         return stringPair;
     }

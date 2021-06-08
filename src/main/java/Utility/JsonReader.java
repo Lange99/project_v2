@@ -48,15 +48,32 @@ public class JsonReader {
         //for every pair in the net build JsonObject composed by place and transition
         for (int i = 0; i < pairsNet.length(); i++) {
             JSONObject obj = (JSONObject) pairsNet.get(i);
-            String place = obj.getString("@place");
-            String trans = obj.getString("@transition");
+            String placeName = obj.getString("@place");
+            Place placeIneed;
+            if (net.getPlace(placeName) == null) {
+                placeIneed = new Place(placeName);
+                net.addSetofPlace(placeIneed);
+            }
+            else {
+                placeIneed = net.getPlace(placeName);
+            }
+
+            String transName = obj.getString("@transition");
             int direction = obj.getInt("@direction");
+            Transition transitionIneed;
+            if (net.getTrans(transName) == null) {
+                transitionIneed = new Transition(transName);
+                net.addSetofTransition(transitionIneed);
+            }
+            else {
+                transitionIneed = net.getTrans(transName);
+            }
+
 
             //initialize new Pair object and add it to the net
-            net.addPair(new Transition(trans), new Place(place), direction);
+            net.addPair(transitionIneed, placeIneed, direction);
 
         }
-        // fill the sets with transitions and nodes
         //the net is built and return
         return net;
     }
@@ -100,14 +117,33 @@ public class JsonReader {
             String placeName = placeJson.getString("@name");
             int token = placeJson.getInt("@token");
             int direction = obj.getInt("@direction");
-            String trans = obj.getString("@transition");
+            Place placeIneed;
+            if (net.getPlace(placeName) == null) {
+                placeIneed = new Place(placeName, token);
+                net.addSetofPlace(placeIneed);
+            }
+            else {
+                placeIneed = net.getPlace(placeName);
+            }
+
+            String transName = obj.getString("@transition");
+            Transition transitionIneed;
+            if (net.getTrans(transName) == null) {
+                transitionIneed = new Transition(transName);
+                net.addSetofTransition(transitionIneed);
+            }
+            else {
+                transitionIneed = net.getTrans(transName);
+            }
+            transitionIneed.addPreOrPost(placeName, direction);
+
             int weight = obj.getInt("@weight");
             //initialize new Pair object and add it to the net
-            Pair pair = new Pair(placeName, token, trans, direction, weight);
-            net.addPairFromJson(pair);
+            Pair pairToAdd = new Pair(placeIneed, transitionIneed, weight);
+            //Pair pair = new Pair(placeName, token, trans, direction, weight);
+
+            net.addPairFromJson(pairToAdd);
         }
-        // fill the sets with transitions and nodes
-        net.fillSet();
         //the net is built and return
         return net;
     }
