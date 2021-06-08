@@ -100,7 +100,11 @@ public class Transition {
         return idPost.size();
     }
 
-
+    /**
+     * this method allows to understand if a connection is a pre or a post
+     * @param name
+     * @return
+     */
     public int getInputOutput(String name) {
         int ret = -1;
         for (String item: idPre)

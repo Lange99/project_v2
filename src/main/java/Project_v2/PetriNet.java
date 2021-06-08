@@ -15,6 +15,12 @@ public class PetriNet extends Net {
         saveInitialMark();
     }
 
+    /**
+     * this method allows to add the weight to the pair
+     * @param nameTrans name of the trans
+     * @param placeMod name of the place
+     * @param weight the quantity of weight
+     */
     public void addWeight(String nameTrans, String placeMod, int weight) {
         //we research the transition and the place that the user wants to change
         Transition transition = researchTrans(nameTrans);
