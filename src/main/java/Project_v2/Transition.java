@@ -21,7 +21,6 @@ public class Transition {
 
     /**
      * this method gets the name of the transition
-     *
      * @return the name of the transition
      */
     public String getName() {
@@ -100,6 +99,7 @@ public class Transition {
         assert idPost != null;
         return idPost.size();
     }
+
 
     public int getInputOutput(String name) {
         int ret = -1;

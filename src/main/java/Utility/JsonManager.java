@@ -40,20 +40,14 @@ public class JsonManager {
             String pathFile = path + "/" + pathname[number - 1];
             return pathFile;
         }
-//            // read json file
-//            if (path.equals(IO.JSON_FILE)) {
-//                newNet = JsonReader.readJson(pathFile);
-//            }
-//            else {
-//                newNet = JsonReader.readPetriJson(pathFile);
-//            }
-//            System.out.println(FILE_IS_LOADED);
-//            System.out.println(SHOW_THE_NET);
-//            return newNet;
-//        }
         return null;
     }
 
+    /**
+     * Method allowing to load a Petri's net
+     * @return the loaded network
+     * @throws FileNotFoundException
+     */
     public static PetriNet loadPetriNet() throws FileNotFoundException {
         String pathFile = getPath(IO.JSON_PETRI_FILE);
         if (pathFile != null) {
@@ -65,6 +59,11 @@ public class JsonManager {
         return null;
     }
 
+    /**
+     * Method allowing to load a net
+     * @return the loaded network
+     * @throws FileNotFoundException
+     */
     public static Net loadNet() throws FileNotFoundException {
         String pathFile = getPath(IO.JSON_FILE);
         if (pathFile != null) {

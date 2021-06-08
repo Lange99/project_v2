@@ -7,7 +7,6 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -52,7 +51,7 @@ public class JsonReader {
             Place placeIneed;
             if (net.getPlace(placeName) == null) {
                 placeIneed = new Place(placeName);
-                net.addSetofPlace(placeIneed);
+                net.addSetOfPlace(placeIneed);
             }
             else {
                 placeIneed = net.getPlace(placeName);
@@ -63,7 +62,7 @@ public class JsonReader {
             Transition transitionIneed;
             if (net.getTrans(transName) == null) {
                 transitionIneed = new Transition(transName);
-                net.addSetofTransition(transitionIneed);
+                net.addSetOfTransition(transitionIneed);
             }
             else {
                 transitionIneed = net.getTrans(transName);
@@ -120,7 +119,7 @@ public class JsonReader {
             Place placeIneed;
             if (net.getPlace(placeName) == null) {
                 placeIneed = new Place(placeName, token);
-                net.addSetofPlace(placeIneed);
+                net.addSetOfPlace(placeIneed);
             }
             else {
                 placeIneed = net.getPlace(placeName);
@@ -130,7 +129,7 @@ public class JsonReader {
             Transition transitionIneed;
             if (net.getTrans(transName) == null) {
                 transitionIneed = new Transition(transName);
-                net.addSetofTransition(transitionIneed);
+                net.addSetOfTransition(transitionIneed);
             }
             else {
                 transitionIneed = net.getTrans(transName);
@@ -142,7 +141,7 @@ public class JsonReader {
             Pair pairToAdd = new Pair(placeIneed, transitionIneed, weight);
             //Pair pair = new Pair(placeName, token, trans, direction, weight);
 
-            net.addPairFromJson(pairToAdd);
+            net.addPair(pairToAdd);
         }
         //the net is built and return
         return net;

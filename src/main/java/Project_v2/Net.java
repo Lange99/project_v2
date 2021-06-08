@@ -1,21 +1,15 @@
 package Project_v2;
-
-import Utility.IO;
-
-
 import java.util.*;
 
 
 public class Net {
-    public static final String INSERT_PLACE_S_ID = "Insert place's Name ";
-    public static final String INSERT_TRANSITION_S_ID = "Insert transition's Name ";
-    public static final String YOU_CAN_T_ADD_THIS_PAIR_BECAUSE_ALREADY_EXISTS = "You can't Add this pair because it already exists";
-    public static final String YOU_WANT_ADD_ANOTHER_PAIR = "You want add another Pair?";
 
     private HashSet<Place> setOfPlace = new HashSet<Place>();
     private HashSet<Transition> setOfTrans = new HashSet<Transition>();
     private ArrayList<Pair> net = new ArrayList<Pair>();
     private String name;
+
+
 
     public void setName(String _name){
         assert !_name.equals(null);
@@ -27,28 +21,62 @@ public class Net {
         return net;
     }
 
-
     public String getName() {
         assert name != null;
         return name;
     }
 
+    public HashSet<Place> getSetOfPlace() {
+        assert setOfPlace.size()!=0;
+        return setOfPlace;
+    }
+
+    public HashSet<Transition> getSetOfTrans() {
+        assert setOfTrans.size()!=0;
+        return setOfTrans;
+    }
+
+    /**
+     * This method allows you to add a Place in setOfPlace
+     * @param placeToAdd is the place to add
+     */
+    public void addSetOfPlace(Place placeToAdd) {
+        assert placeToAdd != null;
+        setOfPlace.add(placeToAdd);
+    }
+
+    /**
+     * This method allows you to add a Transition in setOfTrans
+     * @param transitionToAdd is the transition to add
+     */
+    public void addSetOfTransition(Transition transitionToAdd) {
+        assert transitionToAdd != null;
+        setOfTrans.add(transitionToAdd);
+    }
 
     /**
      * constructor for the net
-     *
      * @param name the name that the user what to give to the net
      */
     public Net(String name) {
         assert name!=null;
         this.name = name;
+    }
 
+    /**
+     * constructor for duplicate a net net
+     * @param _net to duplicate
+     */
+    public Net(Net _net) {
+        net.addAll(_net.getNet());
+        this.setOfPlace.addAll(_net.setOfPlace);
+        this.setOfTrans.addAll(_net.setOfTrans);
+        this.name = _net.getName();
     }
 
     /**
      * this method allow to insert a new node, it is composed by a place and a transition
      */
-
     public boolean addPair(Transition t, Place p, int inOrOut) {
         assert t != null;
         assert p != null;
@@ -115,16 +143,20 @@ public class Net {
     }
 
 
-    public void addPairFromJson(Pair pair) {
+    /**
+     * this method allow to add a pair in the net
+     * @param pair
+     */
+    public void addPair(Pair pair) {
         assert pair!=null;
         net.add(pair);
     }
 
     /**
+     * This method allow to search Place in SetOfPlace
      * @param name this method returns a place from the set knowing the name
      * @return the place if it finds it, null if the place doesn't exist
      */
-    //metodo per tornare un posto dal set dato il nome
     public Place getPlace(String name) {
         assert name!=null && setOfPlace!=null;
         for (Place p : setOfPlace) {
@@ -135,7 +167,11 @@ public class Net {
         return null;
     }
 
-    //metodo per tornare una transizione dal set dato il nome
+    /**
+     * This method allow to search Transition in SetOfTrans
+     * @param name this method returns a trans from the set knowing the name
+     * @return the transition if it finds it, null if the transition doesn't exist
+     */
     public Transition getTrans(String name) {
         for (Transition t : setOfTrans) {
             if (name.compareTo(t.getName()) == 0) {
@@ -148,7 +184,6 @@ public class Net {
 
     /**
      * This metod check if two Pair are equal
-     *
      * @param pairToCheck
      * @return false if Pair are equal
      */
@@ -161,6 +196,7 @@ public class Net {
         }
         return true;
     }
+
     /**
      * this method checks if there are some pendant place
      *
@@ -184,10 +220,17 @@ public class Net {
         return true;
     }
 
-
-
     /**
      * this algorithm checks if the graph is connect
+     * The idea on the algorithm is taken from here: https://www.geeksforgeeks.org/check-if-a-directed-graph-is-connected-or-not/
+     *
+     * At first all data structures are created to subsequently execute a recursive algorithm that will visit all nodes if the graph is connected.
+     *
+     * The necessary data structures are:
+     * 1) A HashMap that associates a Boolaean to each node
+     * 2) A map that associates each node with its neighbors in any direction
+     *
+     * After the creation of these structures, the recursive algorithm is started
      *
      * @return true if the net is connect
      */
@@ -197,7 +240,6 @@ public class Net {
         HashMap<String, Boolean> check = new HashMap<>();
 
         //this map to point out the graph's direction
-        //Map per indicare le direzioni del grafo
         HashMap<String, ArrayList<String>> map = new HashMap<>();
 
 
@@ -247,6 +289,7 @@ public class Net {
             }
 
         }
+
         //we start the recursion
         recursion(map, check, firstPlace);
         //we check the result of the recursion, if there is a false in the map this means that the place hasn't been check, so that isn't linked
@@ -303,10 +346,8 @@ public class Net {
 
     }
     /**
-     * this method check if there is only transition in input or only in outup
-     *
+     * this method check if there is only transition in input or only in output
      * @return true if it is correct, false it isn't
-     *
      */
     public boolean checkTrans() {
         assert !setOfTrans.isEmpty();
@@ -366,36 +407,6 @@ public class Net {
             }
         }
         return null;
-    }
-
-
-
-    public HashSet<Place> getSetOfPlace() {
-        assert setOfPlace.size()!=0;
-        return setOfPlace;
-    }
-
-    public HashSet<Transition> getSetOfTrans() {
-        assert setOfTrans.size()!=0;
-        return setOfTrans;
-    }
-
-    public void addSetofPlace(Place placeToAdd) {
-        assert placeToAdd != null;
-        setOfPlace.add(placeToAdd);
-    }
-
-    public void addSetofTransition(Transition transitionToAdd) {
-        assert transitionToAdd != null;
-        setOfTrans.add(transitionToAdd);
-    }
-
-    public Net(Net _net) {
-        net.addAll(_net.getNet());
-        this.setOfPlace.addAll(_net.setOfPlace);
-        this.setOfTrans.addAll(_net.setOfTrans);
-        this.name = _net.getName();
-
     }
 
 }

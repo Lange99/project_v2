@@ -11,11 +11,6 @@ public class Place {
         this.name=_name;
     }
 
-    /**
-     * this method allows to create the Petri's Net
-     * @param name_ the name of the place
-     * @param token the number of the token
-     */
     public Place(String name_, int token) {
         assert name.equals(null);
         this.name = name_;

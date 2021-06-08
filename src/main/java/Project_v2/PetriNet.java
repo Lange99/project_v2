@@ -26,7 +26,12 @@ public class PetriNet extends Net {
         pair.setWeight(weight);
     }
 
-    //metodo per l'aggiunta dei token nella rete
+    /**
+     * method for adding tokens in the network
+     * @param placeId is the place where i want add token
+     * @param token is the number of token
+     * @return false if the place doesn't exist, true if I add it correctly
+     */
     public boolean addToken(String placeId, int token) {
         Place placeChoosen = researchPlace(placeId);
         if (placeChoosen == null) {
@@ -37,17 +42,15 @@ public class PetriNet extends Net {
         }
     }
 
+    /**
+     * Method that allows you to save the initial marking
+     */
     public void saveInitialMark() {
         for (Pair p : super.getNet()) {
             if (p.getPlace().getNumberOfToken() != 0)
                 initialMarking.put(p, p.getPlace().getNumberOfToken());
         }
     }
-
-    public void addWeightToPair(Pair pair, int weight) {
-        pair.setWeight(weight);
-    }
-
 
     /**
      * Override of the equals method which allows me to check if two petri nets are equal
