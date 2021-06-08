@@ -44,7 +44,7 @@ public class IO {
     private final static String STRING_EMPTY_ERROR = "Warning: the string entered is empty";
     private final static String MAXIMUM_ERROR = "Warning: the value must to be lower or equal to ";
     private final static String MESSAGES_ALLOWED = "Warning, the value allowed are: ";
-    private final static char YES_ANSWER = 'S';
+    private final static char YES_ANSWER = 'Y';
     private final static char NO_ANSWER = 'N';
 
     private static Scanner reader = scannerBuild();
@@ -147,7 +147,7 @@ public class IO {
         boolean finish = false;
         char readValue = '\0';
         do {
-            readValue = leggiChar(message);
+            readValue = readChar(message);
             readValue = Character.toUpperCase(readValue);
             if (allowed.indexOf(readValue) != -1)
                 finish = true;
@@ -157,7 +157,7 @@ public class IO {
         return readValue;
     }
 
-    public static char leggiChar(String message) {
+    public static char readChar(String message) {
         boolean finish = false;
         char readValue = '\0';
         do {
